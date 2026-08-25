@@ -278,6 +278,7 @@
       <div class="canvas" id="canvas">
 
         <svg id="stars-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="deco-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:none;"></svg>
         <div id="dot"></div>
         <svg id="bomb-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 
@@ -431,6 +432,7 @@ const canvas      = document.getElementById('canvas');
 const homeLayer   = document.getElementById('home-layer');
 const sectionLayer= document.getElementById('section-layer');
 const starsSvg    = document.getElementById('stars-svg');
+const decoSvg     = document.getElementById('deco-svg');
 const bombSvg     = document.getElementById('bomb-svg');
 const statusEl    = document.getElementById('status');
 
@@ -457,8 +459,11 @@ function bombTransition(target, done) {
     [cw*0.85, ch*0.40], [cw*0.30, ch*0.85], [cw*0.60, ch*0.80],
   ];
 
-  // Build circles
+  // Build circles — set explicit dimensions so coordinate system is correct
   bombSvg.innerHTML = '';
+  bombSvg.setAttribute('width', cw);
+  bombSvg.setAttribute('height', ch);
+  bombSvg.setAttribute('viewBox', `0 0 ${cw} ${ch}`);
   bombSvg.style.display = 'block';
   bombSvg.style.opacity = '1';
 
@@ -509,12 +514,13 @@ function bombTransition(target, done) {
 function swapContent(target) {
   if (target === 'home') {
     sectionLayer.style.display = 'none';
+    decoSvg.style.display = 'none';
     homeLayer.style.display = 'flex';
     starsSvg.style.display = 'block';
     currentView = 'home';
   } else {
     homeLayer.style.display = 'none';
-    starsSvg.style.display = 'none'; // hide stars on section pages
+    starsSvg.style.display = 'none';
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
       <span class="back-btn" onclick="navTo('home')">← Back to home</span>
@@ -522,7 +528,15 @@ function swapContent(target) {
       ${sec.html}`;
     sectionLayer.style.display = 'block';
     currentView = target;
-    if (target === 'file') initDrawCanvas();
+    if (target === 'file') {
+      decoSvg.style.display = 'none';
+      initDrawCanvas();
+    } else {
+      // Draw rainbows on section pages
+      decoSvg.innerHTML = '';
+      decoSvg.style.display = 'block';
+      setTimeout(drawRainbows, 300);
+    }
   }
 }
 
@@ -618,8 +632,72 @@ document.querySelectorAll('.tool').forEach(t => {
   });
 });
 
-// ── STARS ─────────────────────────────────────────────────────
+// ── RAINBOWS (section page decorations) ───────────────────────
 const dot = document.getElementById('dot');
+
+const RAINBOW = ['#ff0000','#ff8800','#ffff00','#00cc00','#0055ff','#8800cc'];
+
+function drawRainbows() {
+  const cw = canvas.offsetWidth;
+  const ch = canvas.offsetHeight;
+  decoSvg.setAttribute('width', cw);
+  decoSvg.setAttribute('height', ch);
+  decoSvg.setAttribute('viewBox', `0 0 ${cw} ${ch}`);
+
+  // Two rainbow clusters: top-right corner + bottom-left corner
+  const arcs = [];
+
+  // Top-right corner arcs (quarter circles, center at top-right)
+  RAINBOW.forEach((color, i) => {
+    const r = 30 + i * 18;
+    // Arc from (cw-r, 0) to (cw, r), center at (cw, 0)
+    arcs.push({ d: `M ${cw-r},4 A ${r},${r} 0 0,1 ${cw-4},${r}`, color, sw: 5 });
+  });
+
+  // Bottom-left corner arcs
+  RAINBOW.forEach((color, i) => {
+    const r = 25 + i * 16;
+    // Arc from (0, ch-r) to (r, ch), center at (0, ch)
+    arcs.push({ d: `M 4,${ch-r} A ${r},${r} 0 0,0 ${r},${ch-4}`, color, sw: 4 });
+  });
+
+  dot.style.opacity = '1';
+
+  let i = 0;
+  function next() {
+    if (i >= arcs.length) { dot.style.opacity = '0'; return; }
+    const a = arcs[i++];
+    const ns = 'http://www.w3.org/2000/svg';
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', a.d);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', a.color);
+    path.setAttribute('stroke-width', a.sw);
+    path.setAttribute('stroke-linecap', 'round');
+    decoSvg.appendChild(path);
+
+    const total = path.getTotalLength();
+    path.style.strokeDasharray  = total;
+    path.style.strokeDashoffset = total;
+
+    let drawn = 0;
+    const speed = total / 35;
+
+    function frame() {
+      drawn = Math.min(drawn + speed * (0.7 + Math.random() * 0.6), total);
+      path.style.strokeDashoffset = total - drawn;
+      const pt = path.getPointAtLength(drawn);
+      dot.style.left = (pt.x - 2) + 'px';
+      dot.style.top  = (pt.y - 2) + 'px';
+      if (drawn < total) { requestAnimationFrame(frame); }
+      else { setTimeout(next, 60); }
+    }
+    requestAnimationFrame(frame);
+  }
+  next();
+}
+
+// ── STARS ─────────────────────────────────────────────────────
 
 function pentagram(cx, cy, r, jitter) {
   const order = [270, 54, 198, 342, 126, 270].map(d => d * Math.PI / 180);
