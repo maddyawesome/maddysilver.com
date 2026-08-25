@@ -132,18 +132,9 @@
     /* WordArt */
     .wordart-wrap { width: min(460px, 90%); overflow: visible; }
 
-    /* Sparkles */
+    /* WordArt wrapper */
     .sparkle-wrap { position: relative; width: min(460px, 90%); }
     .sparkle-wrap svg { width: 100%; overflow: visible; }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.2) rotate(0deg); }
-      50%       { opacity: 1; transform: scale(1)   rotate(144deg); }
-    }
-    .sp {
-      position: absolute; pointer-events: none;
-      font-size: 14px; line-height: 1;
-      animation: twinkle ease-in-out infinite;
-    }
 
     .canvas-sub {
       font-family: "Comic Sans MS", cursive;
@@ -299,15 +290,6 @@
         <!-- HOME LAYER -->
         <div id="home-layer">
           <div class="sparkle-wrap">
-            <span class="sp" style="top:55px; left:3%;  color:#FFD700;animation-duration:2.1s;animation-delay:0s">✦</span>
-            <span class="sp" style="top:30px; left:16%; color:#FFF176;animation-duration:1.7s;animation-delay:0.6s;font-size:10px">✦</span>
-            <span class="sp" style="top:20px; left:32%; color:#FFD700;animation-duration:2.4s;animation-delay:1.1s">✦</span>
-            <span class="sp" style="top:15px; left:48%; color:#FFEE58;animation-duration:1.9s;animation-delay:0.3s;font-size:11px">✦</span>
-            <span class="sp" style="top:25px; left:63%; color:#FFC107;animation-duration:2.2s;animation-delay:0.9s">✦</span>
-            <span class="sp" style="top:45px; left:78%; color:#FFD700;animation-duration:1.6s;animation-delay:1.5s;font-size:10px">✦</span>
-            <span class="sp" style="top:70px; left:90%; color:#FFEE58;animation-duration:2.8s;animation-delay:1.8s;font-size:9px">✦</span>
-            <span class="sp" style="top:40px; left:23%; color:#FFF9C4;animation-duration:2.0s;animation-delay:0.4s;font-size:9px">✦</span>
-            <span class="sp" style="top:35px; left:55%; color:#FFD700;animation-duration:2.5s;animation-delay:1.3s;font-size:9px">✦</span>
           <svg viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
             <defs>
               <path id="arc" d="M 10,148 Q 240,30 470,148" />
@@ -448,16 +430,17 @@ const SECTIONS = {
     label: 'Now Reading',
     html: `
       <div class="exp">
-        <div class="exp-co">📖 Currently</div>
-        <div class="exp-meta">What's on my bedside table right now</div>
-        <p style="margin-top:6px;">Update me with what you're reading!</p>
+        <div class="exp-co">📖 Currently Reading</div>
+        <div class="exp-meta">Prophet Song — Paul Lynch</div>
+        <p style="margin-top:6px;">I love a good Irish novel. Irish media in general just hits different —
+        Derry Girls forever 😭</p>
       </div>
       <br/>
       <div class="exp">
         <div class="exp-co">✅ Recently Finished</div>
-        <ul style="padding-left:16px;margin-top:6px;">
-          <li>Add your recent reads here</li>
-        </ul>
+        <div class="exp-meta">Yesteryear</div>
+        <p style="margin-top:6px;">Yes, I KNOW it's on Booktok. I just liked the cover.
+        A fun read — and apparently Anne Hathaway is going to be in the movie adaptation?!</p>
       </div>
       <br/>
       <p style="font-size:11px;color:#aaa;">Updated whenever I remember to update the website.</p>`
