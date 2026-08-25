@@ -89,7 +89,7 @@
 
     /* Stardew character */
     #character {
-      height: 110px;
+      height: 80px;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
     }
@@ -99,7 +99,7 @@
       position: absolute; inset: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 12px; padding: 20px; z-index: 1;
+      gap: 6px; padding: 20px; z-index: 1;
     }
 
     /* Section layer — white bg so stars don't bleed through */
@@ -288,7 +288,6 @@
         <svg id="deco-svg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;display:none;"></svg>
         <div id="dot"></div>
         <div id="flash"></div>
-        <img id="character" src="character.png" alt=""/>
 
         <!-- HOME LAYER -->
         <div id="home-layer">
@@ -633,7 +632,7 @@ function drawRainbows() {
     path.style.strokeDashoffset = total;
 
     let drawn = 0;
-    const speed = total / 35;
+    const speed = total / 90;
 
     function frame() {
       drawn = Math.min(drawn + speed * (0.7 + Math.random() * 0.6), total);
@@ -642,7 +641,7 @@ function drawRainbows() {
       dot.style.left = (pt.x - 2) + 'px';
       dot.style.top  = (pt.y - 2) + 'px';
       if (drawn < total) { requestAnimationFrame(frame); }
-      else { setTimeout(next, 60); }
+      else { setTimeout(next, 250); }
     }
     requestAnimationFrame(frame);
   }
