@@ -294,7 +294,7 @@
   <div class="main-area">
 
     <div class="toolbar">
-      <div class="tool" title="Free select">⬚</div>
+      <div class="tool" title="Hand">☞</div>
       <div class="tool" title="Select">▭</div>
       <div class="tool" title="Eraser">◻</div>
       <div class="tool" title="Fill">🪣</div>
@@ -695,7 +695,7 @@ function clearGlobalDraw() {
 initGlobalDraw();
 
 // ── TOOL SELECTION ────────────────────────────────────────────
-const NO_DRAW_TOOLS = new Set(['free select', 'select', 'zoom']);
+const NO_DRAW_TOOLS = new Set(['hand', 'free select', 'select', 'zoom']);
 
 function isMobile() { return window.innerWidth <= 600; }
 
