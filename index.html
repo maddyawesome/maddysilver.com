@@ -9,7 +9,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #008080;
+      background: #fadadd;
       font-family: 'MS Sans Serif', 'Arial', sans-serif;
       font-size: 11px;
       height: 100vh;
@@ -360,44 +360,61 @@
 
     <!-- Canvas -->
     <div class="canvas-scroll">
-      <div class="canvas">
+      <div class="canvas" id="canvas" style="position:relative; overflow:hidden;">
 
-        <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-          <defs>
-            <path id="arc" d="M 10,148 Q 240,30 470,148" />
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stop-color="#cc00cc"/>
-              <stop offset="20%"  stop-color="#ff4400"/>
-              <stop offset="40%"  stop-color="#ffcc00"/>
-              <stop offset="60%"  stop-color="#00bb44"/>
-              <stop offset="80%"  stop-color="#0044ff"/>
-              <stop offset="100%" stop-color="#cc00cc"/>
-            </linearGradient>
-          </defs>
-          <!-- shadow -->
-          <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
-                fill="rgba(0,0,0,0.18)" letter-spacing="1">
-            <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
-          </text>
-          <!-- main -->
-          <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
-                fill="url(#grad)" letter-spacing="1"
-                style="filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
-            <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
-          </text>
-        </svg>
+        <!-- Stars layer (drawn by pencil) -->
+        <svg id="stars-svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;" xmlns="http://www.w3.org/2000/svg"></svg>
 
-        <p class="canvas-sub">FP&amp;A Analyst &middot; Cape Town, South Africa</p>
-        <p class="canvas-sub" style="color:#777;">I ♥ finance, tech, and making things.</p>
+        <!-- Pencil cursor -->
+        <div id="pencil" style="position:absolute;font-size:18px;pointer-events:none;z-index:2;opacity:0;transition:left 0.45s ease,top 0.45s ease;">✏️</div>
 
-        <div class="canvas-links">
-          <a href="mailto:madzsilver@gmail.com">Email</a>
-          <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
-          <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
+        <!-- Foreground content -->
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 20px 40px;">
+
+          <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+            <defs>
+              <path id="arc" d="M 10,148 Q 240,30 470,148" />
+              <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#cc00cc"/>
+                <stop offset="20%"  stop-color="#ff4400"/>
+                <stop offset="40%"  stop-color="#ffcc00"/>
+                <stop offset="60%"  stop-color="#00bb44"/>
+                <stop offset="80%"  stop-color="#0044ff"/>
+                <stop offset="100%" stop-color="#cc00cc"/>
+              </linearGradient>
+              <clipPath id="reveal-clip">
+                <rect id="reveal-rect" x="-10" y="-80" width="0" height="300"/>
+              </clipPath>
+            </defs>
+            <!-- shadow (also revealed) -->
+            <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
+                  fill="rgba(0,0,0,0.18)" letter-spacing="1" clip-path="url(#reveal-clip)">
+              <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
+            </text>
+            <!-- main text -->
+            <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
+                  fill="url(#grad)" letter-spacing="1" clip-path="url(#reveal-clip)"
+                  style="filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
+              <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
+            </text>
+            <!-- Animate the clip rect to reveal text left→right -->
+            <animate xlink:href="#reveal-rect" attributeName="width"
+                     from="0" to="520" dur="2s" begin="0.3s" fill="freeze" calcMode="spline"
+                     keyTimes="0;1" keySplines="0.4 0 0.2 1"/>
+          </svg>
+
+          <p class="canvas-sub">FP&amp;A Analyst &middot; Cape Town, South Africa</p>
+          <p class="canvas-sub" style="color:#777;">I ♥ finance, tech, and making things.</p>
+
+          <div class="canvas-links">
+            <a href="mailto:madzsilver@gmail.com">Email</a>
+            <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
+            <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
+          </div>
+
+          <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
+
         </div>
-
-        <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
-
       </div>
     </div>
   </div>
@@ -629,6 +646,74 @@
       this.classList.add('active');
     });
   });
+
+  // ── PENCIL DRAWS SPARKLE STARS ──
+  // 4-pointed sparkle star path centred at origin, size r
+  function starPath(r) {
+    const i = r * 0.18;
+    return `M0,${-r} L${i},${-i} L${r},0 L${i},${i} L0,${r} L${-i},${i} L${-r},0 L${-i},${-i}Z`;
+  }
+
+  const starDefs = [
+    { px: 12, py: 18, r: 14, color: '#ff69b4' },
+    { px: 80, py: 12, r: 11, color: '#9b59b6' },
+    { px: 88, py: 68, r: 13, color: '#3498db' },
+    { px: 18, py: 75, r: 16, color: '#e67e22' },
+    { px: 72, py: 82, r: 10, color: '#2ecc71' },
+    { px: 60, py: 20, r: 12, color: '#e74c3c' },
+    { px: 6,  py: 50, r: 11, color: '#f39c12' },
+    { px: 93, py: 40, r: 10, color: '#1abc9c' },
+    { px: 45, py: 88, r: 13, color: '#cc00cc' },
+    { px: 35, py: 10, r: 9,  color: '#0044ff' },
+  ];
+
+  const svg   = document.getElementById('stars-svg');
+  const pencil = document.getElementById('pencil');
+  const canvas = document.getElementById('canvas');
+
+  function drawStars() {
+    pencil.style.opacity = '1';
+    let t = 2600; // start after WordArt reveal
+
+    starDefs.forEach((s, i) => {
+      setTimeout(() => {
+        // Move pencil to star position
+        const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+        const px = (s.px / 100) * cw;
+        const py = (s.py / 100) * ch;
+        pencil.style.left = px + 'px';
+        pencil.style.top  = py + 'px';
+
+        // After pencil arrives, draw the star
+        setTimeout(() => {
+          const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          g.setAttribute('transform', `translate(${px}, ${py})`);
+
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', starPath(s.r));
+          path.setAttribute('fill', s.color);
+          path.setAttribute('fill-opacity', '0.25');
+          path.setAttribute('stroke', s.color);
+          path.setAttribute('stroke-width', '1.8');
+          path.setAttribute('pathLength', '100');
+          path.style.strokeDasharray = '100';
+          path.style.strokeDashoffset = '100';
+          path.style.transition = 'stroke-dashoffset 0.35s ease';
+          g.appendChild(path);
+          svg.appendChild(g);
+
+          // Trigger draw
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            path.style.strokeDashoffset = '0';
+          }));
+        }, 460);
+
+      }, t + i * 750);
+    });
+  }
+
+  // Kick off after page settles
+  setTimeout(drawStars, 400);
 </script>
 
 </body>
