@@ -1,1 +1,628 @@
-<h1>Coming soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maddy Silver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Space+Grotesk:wght@300;400;500;700&family=Pacifico&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ffb3c6;
+      --pink-dark: #ff6b9d;
+      --pink-light: #fff0f5;
+      --pink-mid: #ffd6e7;
+      --yellow: #fff3b0;
+      --mint: #b5ead7;
+      --lavender: #c9b1ff;
+      --dark: #1a1a2e;
+      --white: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--pink-light);
+      color: var(--dark);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-bar {
+      background: var(--pink-dark);
+      color: white;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      padding: 10px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-inner {
+      display: inline-block;
+      animation: marquee 18s linear infinite;
+    }
+    .marquee-inner span { margin: 0 2rem; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      background: var(--pink-light);
+      overflow: hidden;
+    }
+
+    .hero-bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: float 6s ease-in-out infinite;
+    }
+    .blob1 { width: 400px; height: 400px; background: var(--pink); top: -100px; left: -100px; animation-delay: 0s; }
+    .blob2 { width: 300px; height: 300px; background: var(--lavender); bottom: -50px; right: -50px; animation-delay: 2s; }
+    .blob3 { width: 200px; height: 200px; background: var(--mint); top: 50%; left: 60%; animation-delay: 4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .wordart {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 1;
+      background: linear-gradient(135deg, #ff6b9d, #c44dff, #ff6b9d, #ffb347);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite, wobble 3s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(3px 3px 0px rgba(255,107,157,0.3));
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-1deg) scale(1); }
+      50% { transform: rotate(1deg) scale(1.02); }
+    }
+
+    .hero-tagline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-weight: 400;
+      color: var(--dark);
+      margin-top: 1rem;
+      position: relative;
+      z-index: 2;
+      animation: slideUp 0.8s ease 0.3s both;
+    }
+
+    .hero-bio {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      margin-top: 1.5rem;
+      position: relative;
+      z-index: 2;
+      animation: slideUp 0.8s ease 0.5s both;
+    }
+
+    .heart {
+      display: inline-block;
+      color: var(--pink-dark);
+      animation: heartbeat 1.2s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      animation: slideUp 0.8s ease 0.7s both;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid var(--dark);
+    }
+    .pill:hover { transform: translateY(-4px) rotate(-2deg); box-shadow: 4px 4px 0 var(--dark); }
+    .pill-pink { background: var(--pink); color: var(--dark); }
+    .pill-lavender { background: var(--lavender); color: var(--dark); }
+    .pill-mint { background: var(--mint); color: var(--dark); }
+    .pill-yellow { background: var(--yellow); color: var(--dark); }
+
+    /* ── STICKER STRIP ── */
+    .sticker-strip {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 2rem;
+      background: var(--pink-mid);
+      border-top: 3px solid var(--dark);
+      border-bottom: 3px solid var(--dark);
+    }
+    .sticker {
+      background: white;
+      border: 2px solid var(--dark);
+      border-radius: 12px;
+      padding: 0.5rem 1.2rem;
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.95rem;
+      transform: rotate(var(--rot, -2deg));
+      box-shadow: 3px 3px 0 var(--dark);
+      transition: transform 0.2s;
+    }
+    .sticker:hover { transform: rotate(0deg) scale(1.1); }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 2.5rem;
+      display: inline-block;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--pink-dark);
+      border-radius: 3px;
+      transform: rotate(-1deg);
+    }
+
+    /* ── EXPERIENCE ── */
+    .experience-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .exp-card {
+      background: white;
+      border: 2px solid var(--dark);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      box-shadow: 5px 5px 0 var(--dark);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--accent, var(--pink-dark));
+    }
+    .exp-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--dark); }
+
+    .exp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .exp-company {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem;
+    }
+    .exp-date {
+      font-size: 0.85rem;
+      background: var(--pink-light);
+      border: 1px solid var(--pink);
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .exp-role {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      color: #555;
+    }
+    .exp-bullets { list-style: none; padding: 0; }
+    .exp-bullets li {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      padding-left: 1.2rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .exp-bullets li::before {
+      content: '✦';
+      position: absolute;
+      left: 0;
+      color: var(--pink-dark);
+      font-size: 0.7rem;
+      top: 4px;
+    }
+
+    /* ── SKILLS ── */
+    .skills-section { background: var(--yellow); border-radius: 24px; padding: 3rem; border: 2px solid var(--dark); box-shadow: 6px 6px 0 var(--dark); }
+    .skills-group { margin-bottom: 2rem; }
+    .skills-group-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .skill-tag {
+      background: white;
+      border: 2px solid var(--dark);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      box-shadow: 2px 2px 0 var(--dark);
+      transition: transform 0.15s;
+    }
+    .skill-tag:hover { transform: translateY(-2px) rotate(-1deg); }
+
+    /* ── YOUTUBE ── */
+    .yt-card {
+      background: var(--pink);
+      border: 3px solid var(--dark);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: 8px 8px 0 var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .yt-icon {
+      font-size: 5rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+    .yt-text h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .yt-text p { font-size: 1rem; line-height: 1.6; max-width: 500px; margin-bottom: 1.2rem; }
+
+    /* ── EDUCATION ── */
+    .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .edu-card {
+      background: var(--lavender);
+      border: 2px solid var(--dark);
+      border-radius: 14px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 4px 4px 0 var(--dark);
+      transition: transform 0.2s;
+    }
+    .edu-card:hover { transform: rotate(1deg) scale(1.02); }
+    .edu-card h4 { font-family: 'Fredoka One', cursive; font-size: 1rem; margin-bottom: 0.2rem; }
+    .edu-card p { font-size: 0.88rem; color: #333; }
+    .edu-card .edu-year { font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; opacity: 0.7; }
+
+    /* ── CERTS ── */
+    .cert-list { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .cert-badge {
+      background: var(--mint);
+      border: 2px solid var(--dark);
+      border-radius: 12px;
+      padding: 0.8rem 1.2rem;
+      box-shadow: 3px 3px 0 var(--dark);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .cert-badge:hover { transform: translateY(-3px) rotate(-1deg); }
+    .cert-badge span { display: block; font-size: 0.75rem; font-weight: 400; opacity: 0.7; margin-top: 0.2rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--dark);
+      color: white;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+    }
+    footer a { color: var(--pink); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .footer-heart { animation: heartbeat 1.2s ease-in-out infinite; display: inline-block; }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── CURSOR TRAIL ── */
+    .cursor-dot {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--pink-dark);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s;
+      mix-blend-mode: multiply;
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>✦ finance</span><span>✦ tech</span><span>✦ making things</span>
+    <span>✦ FP&amp;A</span><span>✦ AI agents</span><span>✦ YouTube</span>
+    <span>✦ SQL</span><span>✦ financial modelling</span><span>✦ Cape Town</span>
+    <span>✦ finance</span><span>✦ tech</span><span>✦ making things</span>
+    <span>✦ FP&amp;A</span><span>✦ AI agents</span><span>✦ YouTube</span>
+    <span>✦ SQL</span><span>✦ financial modelling</span><span>✦ Cape Town</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-blob blob1"></div>
+  <div class="hero-bg-blob blob2"></div>
+  <div class="hero-bg-blob blob3"></div>
+
+  <h1 class="wordart">Maddy Silver</h1>
+
+  <p class="hero-tagline">FP&A Analyst · EY Alumni · Cape Town, South Africa</p>
+
+  <p class="hero-bio">I <span class="heart">♥</span> finance, tech, and making things.</p>
+
+  <div class="hero-links">
+    <a class="pill pill-pink" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">💼 LinkedIn</a>
+    <a class="pill pill-lavender" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">▶ YouTube</a>
+    <a class="pill pill-mint" href="mailto:madzsilver@gmail.com">✉ Email</a>
+  </div>
+</section>
+
+<!-- STICKER STRIP -->
+<div class="sticker-strip">
+  <div class="sticker" style="--rot: -3deg">📊 FP&A</div>
+  <div class="sticker" style="--rot: 2deg">🤖 AI Agents</div>
+  <div class="sticker" style="--rot: -1deg">🎬 YouTube</div>
+  <div class="sticker" style="--rot: 3deg">💻 SQL</div>
+  <div class="sticker" style="--rot: -2deg">📈 Financial Modelling</div>
+  <div class="sticker" style="--rot: 1deg">🛠 Builder</div>
+  <div class="sticker" style="--rot: -3deg">✨ CA(SA) Eligible</div>
+</div>
+
+<!-- EXPERIENCE -->
+<section>
+  <h2 class="section-title reveal">Experience</h2>
+  <div class="experience-grid">
+
+    <div class="exp-card reveal" style="--accent: #ff6b9d;">
+      <div class="exp-top">
+        <span class="exp-company">Reapit</span>
+        <span class="exp-date">2025 – Present</span>
+      </div>
+      <div class="exp-role">FP&A Analyst</div>
+      <ul class="exp-bullets">
+        <li>Financial planning and analysis at a large-scale PropTech software company</li>
+        <li>Forecasting, budgeting, and performance tracking across the business</li>
+      </ul>
+    </div>
+
+    <div class="exp-card reveal" style="--accent: #c44dff;">
+      <div class="exp-top">
+        <span class="exp-company">Recess</span>
+        <span class="exp-date">2025</span>
+      </div>
+      <div class="exp-role">Finance Lead · US SaaS Startup</div>
+      <ul class="exp-bullets">
+        <li>End-to-end FP&A including forecasting, budgeting, and performance tracking</li>
+        <li>Partnered closely with the CEO on strategic decisions — runway, cost, growth</li>
+        <li>Built financial models covering revenue, unit economics, and scenario analysis</li>
+        <li>Led finance operations across payments, pricing, and cost structures</li>
+      </ul>
+    </div>
+
+    <div class="exp-card reveal" style="--accent: #b5ead7;">
+      <div class="exp-top">
+        <span class="exp-company">Maholla</span>
+        <span class="exp-date">2022 – 2025</span>
+      </div>
+      <div class="exp-role">Lead Accountant · Part-Time · Dutch Tech Startup</div>
+      <ul class="exp-bullets">
+        <li>Set up and managed group financial accounts while completing CA(SA) articles</li>
+        <li>Led FP&A processes ensuring accurate forecasting and performance tracking</li>
+        <li>Oversaw successful pre-seed and seed rounds, raising $2M in capital</li>
+      </ul>
+    </div>
+
+    <div class="exp-card reveal" style="--accent: #fff3b0;">
+      <div class="exp-top">
+        <span class="exp-company">EY</span>
+        <span class="exp-date">2022 – 2025</span>
+      </div>
+      <div class="exp-role">Audit Supervisor · CA(SA) Articles</div>
+      <ul class="exp-bullets">
+        <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
+        <li>Led audit teams for one of South Africa's largest financial services companies</li>
+        <li>Ensured IFRS compliance and maintained strong client relationships</li>
+        <li>Managed and mentored junior auditors</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section>
+  <h2 class="section-title reveal">Skills</h2>
+  <div class="skills-section reveal">
+    <div class="skills-group">
+      <div class="skills-group-title">Finance</div>
+      <div class="skill-tags">
+        <span class="skill-tag">FP&A & Forecasting</span>
+        <span class="skill-tag">Financial Modelling</span>
+        <span class="skill-tag">SaaS & Unit Economics</span>
+        <span class="skill-tag">Strategic Finance</span>
+        <span class="skill-tag">Revenue & Margin Analysis</span>
+        <span class="skill-tag">IFRS Reporting</span>
+        <span class="skill-tag">Runway Management</span>
+        <span class="skill-tag">Board Reporting</span>
+      </div>
+    </div>
+    <div class="skills-group">
+      <div class="skills-group-title">Tech & Tools</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Google Sheets / Excel</span>
+        <span class="skill-tag">Metabase</span>
+        <span class="skill-tag">AI Agent Building</span>
+        <span class="skill-tag">Claude Code</span>
+        <span class="skill-tag">Deel</span>
+        <span class="skill-tag">Xero</span>
+        <span class="skill-tag">Sage</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- YOUTUBE -->
+<section>
+  <h2 class="section-title reveal">YouTube</h2>
+  <div class="yt-card reveal">
+    <div class="yt-icon">🎬</div>
+    <div class="yt-text">
+      <h3>@accountingwithmaddy</h3>
+      <p>From CA(SA) study content and articles diaries, to pivoting out of audit, to general finance and career advice — it's evolved a lot. Come for the accounting, stay for the chaos.</p>
+      <a class="pill pill-yellow" href="https://www.youtube.com/@accountingwithmaddy" target="_blank" style="display:inline-flex;">▶ Watch on YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section>
+  <h2 class="section-title reveal">Education</h2>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <h4>University of Cape Town</h4>
+      <p>Post-Graduate Diploma in Accounting</p>
+      <div class="edu-year">2021 – 2022</div>
+    </div>
+    <div class="edu-card reveal">
+      <h4>University of Cape Town</h4>
+      <p>BCom, Chartered Accounting</p>
+      <div class="edu-year">2019 – 2021</div>
+    </div>
+    <div class="edu-card reveal">
+      <h4>University of Cape Town</h4>
+      <p>Bachelor of Business Science, Actuarial Science</p>
+      <div class="edu-year">2017 – 2019</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section>
+  <h2 class="section-title reveal">Certifications</h2>
+  <div class="cert-list">
+    <div class="cert-badge reveal">FMVA®<span>CFI · 2025</span></div>
+    <div class="cert-badge reveal">Analyze Data with SQL<span>Codecademy · 2025</span></div>
+    <div class="cert-badge reveal">APC<span>SAICA · 2024</span></div>
+    <div class="cert-badge reveal">ITC<span>SAICA · 2022</span></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Made with <span class="footer-heart">♥</span> by Maddy Silver &nbsp;·&nbsp;
+    <a href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a> &nbsp;·&nbsp;
+    <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a> &nbsp;·&nbsp;
+    <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
+  </p>
+</footer>
+
+<script>
+  // Cursor trail
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
