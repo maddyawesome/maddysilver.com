@@ -529,6 +529,7 @@ function swapContent(target) {
     homeLayer.style.display = 'none';
     starsSvg.style.display = 'none';
     dotGen++; // cancel any in-flight star/rainbow dot animation
+    globalDraw.style.pointerEvents = 'none'; // disable drawing so buttons are clickable
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
       <span class="back-btn" onclick="navTo('home')">← Back to home</span>
@@ -623,8 +624,8 @@ document.querySelectorAll('.tool').forEach(t => {
     globalDraw.style.pointerEvents = this.title === 'Pencil' ? 'auto' : 'none';
   });
 });
-// Pencil is active by default → enable drawing
-globalDraw.style.pointerEvents = 'auto';
+// Drawing is opt-in — click pencil tool to activate
+globalDraw.style.pointerEvents = 'none';
 
 // ── GAMES ─────────────────────────────────────────────────────
 function showGame(name) {
@@ -931,6 +932,7 @@ function animateStroke(d, color, sw, fo, onDone) {
 }
 
 function drawAllStars() {
+  if (currentView !== 'home') return;
   dot.style.opacity = '1';
   const cw = canvas.offsetWidth;
   const ch = canvas.offsetHeight;
