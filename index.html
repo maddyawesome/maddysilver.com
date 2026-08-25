@@ -228,7 +228,14 @@
       body { padding: 0; }
       .window { width: 100%; height: 100%; box-shadow: none; border: none; overflow: hidden; }
 
-      .toolbar { display: none; }
+      .main-area { flex-direction: column; }
+      .toolbar {
+        width: 100%; height: auto;
+        display: flex; flex-direction: row; flex-wrap: wrap;
+        border-right: none; border-bottom: 1px solid #808080;
+        padding: 2px 3px; gap: 2px;
+      }
+      .tool { width: 26px; height: 26px; font-size: 12px; }
       .status-bar { display: none; }
 
       .menu-bar {
@@ -401,7 +408,7 @@ const SECTIONS = {
   },
   about: {
     label: 'About Maddy',
-    html: `<p>I'm Maddy — I ♥ finance, tech, and making things.</p><br/>
+    html: `<p>I'm Maddy, and I love finance, tech, and making things.</p><br/>
            <p>Started my career in audit at EY, moved into startup finance, and now work in FP&amp;A at Reapit.
            Along the way: a YouTube channel, SQL, AI agents, web apps.</p><br/>
            <p>Based in Cape Town, South Africa. CA(SA) eligible.</p>`
@@ -533,7 +540,11 @@ function swapContent(target) {
     homeLayer.style.display = 'none';
     starsSvg.style.display = 'none';
     dotGen++; // cancel any in-flight star/rainbow dot animation
-    globalDraw.style.pointerEvents = 'none'; // disable drawing so buttons are clickable
+    if (target === 'games') {
+      globalDraw.style.pointerEvents = 'none';
+    } else {
+      globalDraw.style.pointerEvents = NO_DRAW_TOOLS.has(currentTool) ? 'none' : 'auto';
+    }
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
       <span class="back-btn" onclick="navTo('home')">← Back to home</span>
@@ -572,6 +583,7 @@ swatches.forEach(c => {
 const globalDraw = document.getElementById('global-draw');
 let gdCtx = null;
 let gdDrawing = false, gdLx = 0, gdLy = 0;
+let gdSnapshot = null; let currentTool = 'pencil';
 
 function initGlobalDraw() {
   const rect = canvas.getBoundingClientRect();
@@ -581,25 +593,90 @@ function initGlobalDraw() {
 
   function getColor() { return document.getElementById('fg').style.background || '#000'; }
   function getSize()  { return parseInt(document.getElementById('brush-size')?.value || 4); }
+  function saveSnap() { gdSnapshot = gdCtx.getImageData(0, 0, globalDraw.width, globalDraw.height); }
+  function loadSnap() { if (gdSnapshot) gdCtx.putImageData(gdSnapshot, 0, 0); }
+
+  function spray(x, y) {
+    const r = getSize() * 5, d = 30;
+    gdCtx.fillStyle = getColor();
+    for (let i = 0; i < d; i++) {
+      const a = Math.random() * Math.PI * 2, dist = Math.random() * r;
+      gdCtx.fillRect(x + dist * Math.cos(a), y + dist * Math.sin(a), 1.5, 1.5);
+    }
+  }
 
   function gdStart(x, y) {
     gdDrawing = true; gdLx = x; gdLy = y;
-    gdCtx.beginPath();
-    gdCtx.arc(x, y, getSize() / 2, 0, Math.PI * 2);
-    gdCtx.fillStyle = getColor(); gdCtx.fill();
+    switch (currentTool) {
+      case 'pencil':
+        gdCtx.beginPath(); gdCtx.arc(x, y, getSize()/2, 0, Math.PI*2);
+        gdCtx.fillStyle = getColor(); gdCtx.fill(); break;
+      case 'brush':
+        gdCtx.beginPath(); gdCtx.arc(x, y, getSize()*1.5, 0, Math.PI*2);
+        gdCtx.fillStyle = getColor(); gdCtx.fill(); break;
+      case 'eraser':
+        gdCtx.clearRect(x - getSize(), y - getSize(), getSize()*2, getSize()*2); break;
+      case 'line': case 'curve': case 'rectangle': case 'round rect':
+      case 'ellipse': case 'polygon':
+        saveSnap(); break;
+      case 'text': {
+        const txt = prompt('Enter text:');
+        if (txt) {
+          gdCtx.font = `bold ${Math.max(14, getSize()*4)}px "Comic Sans MS","Comic Neue",cursive`;
+          gdCtx.fillStyle = getColor(); gdCtx.fillText(txt, x, y);
+        }
+        gdDrawing = false; break;
+      }
+      case 'eyedropper': {
+        const px = gdCtx.getImageData(x, y, 1, 1).data;
+        if (px[3] > 0) {
+          const hex = '#' + [px[0],px[1],px[2]].map(v => v.toString(16).padStart(2,'0')).join('');
+          document.getElementById('fg').style.background = hex;
+        }
+        gdDrawing = false; break;
+      }
+      case 'airbrush': spray(x, y); break;
+    }
   }
+
   function gdMove(x, y) {
     if (!gdDrawing) return;
-    gdCtx.beginPath(); gdCtx.moveTo(gdLx, gdLy); gdCtx.lineTo(x, y);
-    gdCtx.strokeStyle = getColor(); gdCtx.lineWidth = getSize();
-    gdCtx.lineCap = 'round'; gdCtx.lineJoin = 'round'; gdCtx.stroke();
-    gdLx = x; gdLy = y;
+    const sz = getSize(), col = getColor();
+    switch (currentTool) {
+      case 'pencil':
+        gdCtx.beginPath(); gdCtx.moveTo(gdLx, gdLy); gdCtx.lineTo(x, y);
+        gdCtx.strokeStyle = col; gdCtx.lineWidth = sz;
+        gdCtx.lineCap = 'round'; gdCtx.lineJoin = 'round'; gdCtx.stroke();
+        gdLx = x; gdLy = y; break;
+      case 'brush':
+        gdCtx.beginPath(); gdCtx.moveTo(gdLx, gdLy); gdCtx.lineTo(x, y);
+        gdCtx.strokeStyle = col; gdCtx.lineWidth = sz * 3;
+        gdCtx.lineCap = 'round'; gdCtx.lineJoin = 'round'; gdCtx.stroke();
+        gdLx = x; gdLy = y; break;
+      case 'eraser':
+        gdCtx.clearRect(x - sz, y - sz, sz*2, sz*2);
+        gdLx = x; gdLy = y; break;
+      case 'line': case 'curve':
+        loadSnap();
+        gdCtx.beginPath(); gdCtx.moveTo(gdLx, gdLy); gdCtx.lineTo(x, y);
+        gdCtx.strokeStyle = col; gdCtx.lineWidth = sz; gdCtx.lineCap = 'round'; gdCtx.stroke(); break;
+      case 'rectangle': case 'round rect': case 'polygon':
+        loadSnap();
+        gdCtx.strokeStyle = col; gdCtx.lineWidth = sz;
+        gdCtx.strokeRect(gdLx, gdLy, x - gdLx, y - gdLy); break;
+      case 'ellipse':
+        loadSnap();
+        gdCtx.beginPath();
+        gdCtx.ellipse((gdLx+x)/2, (gdLy+y)/2, Math.abs(x-gdLx)/2, Math.abs(y-gdLy)/2, 0, 0, Math.PI*2);
+        gdCtx.strokeStyle = col; gdCtx.lineWidth = sz; gdCtx.stroke(); break;
+      case 'airbrush': spray(x, y); break;
+    }
   }
 
   globalDraw.addEventListener('mousedown',  e => gdStart(e.offsetX, e.offsetY));
   globalDraw.addEventListener('mousemove',  e => gdMove(e.offsetX, e.offsetY));
-  globalDraw.addEventListener('mouseup',    () => gdDrawing = false);
-  globalDraw.addEventListener('mouseleave', () => gdDrawing = false);
+  globalDraw.addEventListener('mouseup',    () => { gdDrawing = false; gdSnapshot = null; });
+  globalDraw.addEventListener('mouseleave', () => { gdDrawing = false; gdSnapshot = null; });
 
   globalDraw.addEventListener('touchstart', e => {
     e.preventDefault();
@@ -611,7 +688,7 @@ function initGlobalDraw() {
     const r = globalDraw.getBoundingClientRect();
     gdMove(e.touches[0].clientX - r.left, e.touches[0].clientY - r.top);
   }, { passive: false });
-  globalDraw.addEventListener('touchend', () => gdDrawing = false);
+  globalDraw.addEventListener('touchend', () => { gdDrawing = false; gdSnapshot = null; });
 }
 
 function clearGlobalDraw() {
@@ -620,16 +697,26 @@ function clearGlobalDraw() {
 
 initGlobalDraw();
 
-// ── TOOL SELECTION → toggle draw mode ─────────────────────────
+// ── TOOL SELECTION ────────────────────────────────────────────
+const NO_DRAW_TOOLS = new Set(['free select', 'select', 'zoom']);
+
+function activateTool(el) {
+  document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  currentTool = el.title.toLowerCase();
+  if (currentView === 'games') {
+    globalDraw.style.pointerEvents = 'none';
+  } else {
+    globalDraw.style.pointerEvents = NO_DRAW_TOOLS.has(currentTool) ? 'none' : 'auto';
+  }
+}
+
 document.querySelectorAll('.tool').forEach(t => {
-  t.addEventListener('click', function() {
-    document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
-    this.classList.add('active');
-    globalDraw.style.pointerEvents = this.title === 'Pencil' ? 'auto' : 'none';
-  });
+  t.addEventListener('click', function() { activateTool(this); });
 });
-// Drawing is opt-in — click pencil tool to activate
-globalDraw.style.pointerEvents = 'none';
+
+// Pencil active and drawing enabled by default
+activateTool(document.querySelector('.tool[title="Pencil"]'));
 
 // ── GAMES ─────────────────────────────────────────────────────
 function showGame(name) {
