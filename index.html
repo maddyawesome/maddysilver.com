@@ -535,15 +535,13 @@ function swapContent(target) {
     homeLayer.style.display = 'flex';
     starsSvg.style.display = 'block';
     currentView = 'home';
+    if (!isMobile()) activateTool(document.querySelector('.tool[title="Pencil"]'));
   } else {
     homeLayer.style.display = 'none';
     starsSvg.style.display = 'none';
     dotGen++; // cancel any in-flight star/rainbow dot animation
-    if (target === 'games' || isMobile()) {
-      globalDraw.style.pointerEvents = 'none';
-    } else {
-      globalDraw.style.pointerEvents = NO_DRAW_TOOLS.has(currentTool) ? 'none' : 'auto';
-    }
+    if (!isMobile()) activateTool(document.querySelector('.tool[title="Select"]'));
+    globalDraw.style.pointerEvents = 'none';
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
       <span class="back-btn" onclick="navTo('home')">← Back to home</span>
