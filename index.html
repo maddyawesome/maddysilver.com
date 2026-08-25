@@ -230,6 +230,40 @@
       border: 1px solid; border-color: #808080 #fff #fff #808080;
       padding: 1px 6px; font-size: 11px;
     }
+
+    @media (max-width: 600px) {
+      body { align-items: stretch; justify-content: stretch; }
+
+      .window {
+        width: 100vw; height: 100dvh;
+        box-shadow: none; border: none;
+      }
+
+      .toolbar { display: none; }
+      .color-section { display: none; }
+      .status-bar { display: none; }
+
+      .menu-bar {
+        overflow-x: auto; white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .menu-bar::-webkit-scrollbar { display: none; }
+      .menu-item { padding: 5px 12px; font-size: 13px; }
+
+      .canvas-scroll { padding: 6px; }
+
+      #home-layer { gap: 10px; padding: 16px; }
+      .wordart-wrap, .sparkle-wrap { width: min(340px, 92%); }
+
+      .canvas-sub { font-size: 14px; }
+      .canvas-links { font-size: 13px; gap: 16px; }
+
+      #section-layer { padding: 14px 16px; font-size: 13px; }
+      .sec-title { font-size: 16px; }
+      .exp-co { font-size: 14px; }
+      .skill-cols { grid-template-columns: 1fr; gap: 12px; }
+    }
   </style>
 </head>
 <body>
