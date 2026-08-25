@@ -21,29 +21,23 @@
 
     .window {
       background: #c0c0c0;
-      border: 2px solid;
-      border-color: #fff #808080 #808080 #fff;
+      border: 2px solid; border-color: #fff #808080 #808080 #fff;
       box-shadow: 3px 3px 0 #000;
       width: min(98vw, 860px);
       height: min(96vh, 620px);
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
     }
 
     .title-bar {
       background: linear-gradient(to right, #000080, #1084d0);
       padding: 3px 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      user-select: none;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0; user-select: none;
     }
     .title-bar-text { color: #fff; font-weight: bold; font-size: 12px; }
     .title-bar-controls { display: flex; gap: 2px; }
     .tb-btn {
-      width: 16px; height: 14px;
-      background: #c0c0c0;
+      width: 16px; height: 14px; background: #c0c0c0;
       border: 1px solid; border-color: #fff #808080 #808080 #fff;
       font-size: 9px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
@@ -52,42 +46,29 @@
 
     .menu-bar {
       background: #c0c0c0;
-      display: flex;
-      padding: 2px 2px 0;
-      flex-shrink: 0;
-      border-bottom: 1px solid #808080;
+      display: flex; padding: 2px 2px 0;
+      flex-shrink: 0; border-bottom: 1px solid #808080;
     }
-    .menu-item {
-      padding: 3px 10px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    .menu-item:hover, .menu-item.active { background: #000080; color: #fff; }
+    .menu-item { padding: 3px 10px; font-size: 11px; cursor: pointer; }
+    .menu-item:hover { background: #000080; color: #fff; }
 
     .sep {
-      height: 4px;
-      background: #c0c0c0;
-      border-top: 1px solid #808080;
-      border-bottom: 1px solid #fff;
+      height: 4px; background: #c0c0c0;
+      border-top: 1px solid #808080; border-bottom: 1px solid #fff;
       flex-shrink: 0;
     }
 
     .main-area { display: flex; flex: 1; overflow: hidden; }
 
     .toolbar {
-      width: 54px;
-      background: #c0c0c0;
+      width: 54px; background: #c0c0c0;
       border-right: 1px solid #808080;
       padding: 4px 3px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      align-content: start;
-      flex-shrink: 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+      align-content: start; flex-shrink: 0;
     }
     .tool {
-      width: 22px; height: 22px;
-      background: #c0c0c0;
+      width: 22px; height: 22px; background: #c0c0c0;
       border: 1px solid; border-color: #fff #808080 #808080 #fff;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; font-size: 11px; user-select: none;
@@ -96,137 +77,82 @@
     .tool.active { border-color: #808080 #fff #fff #808080; background: #b0b0b0; }
 
     .canvas-scroll {
-      flex: 1;
-      overflow: hidden;
-      background: #808080;
-      padding: 10px;
-      position: relative;
+      flex: 1; overflow: hidden;
+      background: #808080; padding: 10px;
     }
 
-    /* The white canvas */
     .canvas {
       background: #fff;
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
+      width: 100%; height: 100%;
+      position: relative; overflow: hidden;
     }
 
-    /* Home content layer */
+    /* Home layer */
     #home-layer {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      padding: 20px;
-      z-index: 1;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; padding: 20px; z-index: 1;
     }
 
-    /* Section content layer */
+    /* Section layer — white bg so stars don't bleed through */
     #section-layer {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       display: none;
-      padding: 24px 28px;
+      background: #fff;
+      padding: 20px 24px;
       overflow-y: auto;
       font-family: "Comic Sans MS", cursive;
-      font-size: 12px;
-      line-height: 1.7;
+      font-size: 12px; line-height: 1.7;
       z-index: 1;
     }
 
-    /* Eraser cover — white div that grows to erase old content */
-    #erase-cover {
-      position: absolute;
-      top: 0; left: 0; bottom: 0;
-      width: 0;
-      background: #fff;
-      z-index: 5;
-      pointer-events: none;
-    }
-
-    /* Eraser block that rides the right edge of the cover */
-    #eraser-block {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 38px;
-      left: 0;
-      background: #e8e8e8;
-      border-left: 2px solid #bbb;
-      border-right: 2px solid #bbb;
-      z-index: 6;
-      display: none;
-      pointer-events: none;
-    }
-    #eraser-block::before {
-      content: '';
-      display: block;
-      height: 10px;
-      background: #ffb3ba;
-      border-bottom: 1px solid #ccc;
-    }
-
-    /* Stars SVG */
+    /* Stars — only visible on home */
     #stars-svg {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
-    /* Pixel dot cursor */
+    /* Pixel dot */
     #dot {
-      position: absolute;
-      width: 4px; height: 4px;
-      background: #111;
-      pointer-events: none;
-      z-index: 3;
-      opacity: 0;
+      position: absolute; width: 4px; height: 4px;
+      background: #111; pointer-events: none;
+      z-index: 3; opacity: 0;
+    }
+
+    /* Bomb explosion overlay */
+    #bomb-svg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 10;
+      display: none;
     }
 
     /* WordArt */
-    .wordart-wrap {
-      width: min(460px, 90%);
-      overflow: visible;
-    }
+    .wordart-wrap { width: min(460px, 90%); overflow: visible; }
 
     .canvas-sub {
       font-family: "Comic Sans MS", cursive;
-      font-size: 13px;
-      color: #444;
-      text-align: center;
+      font-size: 13px; color: #444; text-align: center;
     }
     .canvas-links {
       display: flex; gap: 20px;
-      font-family: "Comic Sans MS", cursive;
-      font-size: 12px;
+      font-family: "Comic Sans MS", cursive; font-size: 12px;
     }
     .canvas-links a { color: #0000EE; text-decoration: underline; }
     .canvas-links a:hover { color: #cc0066; }
-    .canvas-hint {
-      font-family: "Comic Sans MS", cursive;
-      font-size: 10px; color: #aaa;
-    }
+    .canvas-hint { font-family: "Comic Sans MS", cursive; font-size: 10px; color: #aaa; }
 
-    /* Section content styles */
+    /* Section content */
     .sec-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 16px;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 6px;
+      font-size: 17px; font-weight: bold;
+      margin-bottom: 14px; border-bottom: 2px solid #ddd; padding-bottom: 5px;
     }
     .back-btn {
-      display: inline-block;
-      margin-bottom: 14px;
-      font-size: 11px;
-      cursor: pointer;
-      color: #0000EE;
-      text-decoration: underline;
+      display: inline-block; margin-bottom: 12px;
+      font-size: 11px; cursor: pointer;
+      color: #0000EE; text-decoration: underline;
     }
     .back-btn:hover { color: #cc0066; }
     .exp { margin-bottom: 14px; }
@@ -243,13 +169,35 @@
     .edu-item span { font-size: 11px; color: #777; }
     .sec-link { color: #0000EE; text-decoration: underline; }
 
+    /* Drawing canvas section */
+    .draw-wrap {
+      display: flex; flex-direction: column;
+      height: calc(100% - 70px);
+    }
+    .draw-hint { font-size: 11px; color: #666; margin-bottom: 6px; }
+    #draw-canvas {
+      flex: 1; border: 2px inset #aaa;
+      cursor: crosshair; display: block;
+      background: #fff; touch-action: none;
+    }
+    .draw-controls {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 6px; flex-shrink: 0;
+    }
+    .draw-controls label { font-size: 11px; }
+    .win-btn {
+      padding: 2px 10px; background: #c0c0c0;
+      border: 2px solid; border-color: #fff #808080 #808080 #fff;
+      font-family: "Comic Sans MS", cursive; font-size: 11px; cursor: pointer;
+    }
+    .win-btn:active { border-color: #808080 #fff #fff #808080; }
+
     /* Colour section */
     .color-section {
       background: #c0c0c0;
       border-top: 2px solid; border-color: #fff #808080 #808080 #fff;
       padding: 4px 6px;
-      display: flex; align-items: center; gap: 8px;
-      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
     }
     .color-preview-box { width: 36px; height: 28px; position: relative; flex-shrink: 0; }
     .color-fg {
@@ -271,10 +219,8 @@
     .swatch:hover { outline: 1px solid #000; }
 
     .status-bar {
-      background: #c0c0c0;
-      border-top: 1px solid #808080;
-      padding: 2px 6px;
-      flex-shrink: 0;
+      background: #c0c0c0; border-top: 1px solid #808080;
+      padding: 2px 6px; flex-shrink: 0;
     }
     .status-panel {
       border: 1px solid; border-color: #808080 #fff #fff #808080;
@@ -291,7 +237,7 @@
     <div class="title-bar-controls">
       <button class="tb-btn">_</button>
       <button class="tb-btn">□</button>
-      <button class="tb-btn" onclick="navTo('file')">✕</button>
+      <button class="tb-btn" onclick="navTo('home')">✕</button>
     </div>
   </div>
 
@@ -312,11 +258,11 @@
     <div class="toolbar">
       <div class="tool" title="Free select">⬚</div>
       <div class="tool" title="Select">▭</div>
-      <div class="tool active" title="Eraser">◻</div>
+      <div class="tool" title="Eraser">◻</div>
       <div class="tool" title="Fill">🪣</div>
       <div class="tool" title="Eyedropper">💉</div>
       <div class="tool" title="Zoom">🔍</div>
-      <div class="tool" title="Pencil">✏</div>
+      <div class="tool active" title="Pencil">✏</div>
       <div class="tool" title="Brush">🖌</div>
       <div class="tool" title="Airbrush">💨</div>
       <div class="tool" title="Text" style="font-weight:bold;font-size:13px;">A</div>
@@ -333,8 +279,7 @@
 
         <svg id="stars-svg" xmlns="http://www.w3.org/2000/svg"></svg>
         <div id="dot"></div>
-        <div id="erase-cover"></div>
-        <div id="eraser-block"></div>
+        <svg id="bomb-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 
         <!-- HOME LAYER -->
         <div id="home-layer">
@@ -354,12 +299,12 @@
               </clipPath>
             </defs>
             <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
-                  fill="rgba(0,0,0,0.18)" letter-spacing="1" clip-path="url(#reveal-clip)">
+                  fill="rgba(0,0,0,0.15)" letter-spacing="1" clip-path="url(#reveal-clip)">
               <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
             </text>
             <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
                   fill="url(#grad)" letter-spacing="1" clip-path="url(#reveal-clip)"
-                  style="filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
+                  style="filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.25));">
               <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
             </text>
             <animate xlink:href="#reveal-rect" attributeName="width"
@@ -379,7 +324,7 @@
           <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
         </div>
 
-        <!-- SECTION LAYER (filled by JS) -->
+        <!-- SECTION LAYER -->
         <div id="section-layer"></div>
 
       </div>
@@ -391,7 +336,7 @@
   <div class="color-section">
     <div class="color-preview-box">
       <div class="color-fg" id="fg"></div>
-      <div class="color-bg" id="bg"></div>
+      <div class="color-bg"></div>
     </div>
     <div class="palette" id="palette"></div>
   </div>
@@ -405,25 +350,37 @@
 <script>
 // ── SECTION CONTENT ──────────────────────────────────────────
 const SECTIONS = {
+  file: {
+    label: 'Draw something!',
+    html: `
+      <p class="draw-hint">Pick a colour from the palette below, then draw freely. ✏️</p>
+      <div class="draw-wrap">
+        <canvas id="draw-canvas"></canvas>
+        <div class="draw-controls">
+          <label>Size: <input type="range" id="brush-size" min="1" max="30" value="5" style="width:70px;vertical-align:middle;"></label>
+          <button class="win-btn" onclick="clearDraw()">Clear</button>
+        </div>
+      </div>`
+  },
   about: {
     label: 'About Maddy',
     html: `<p>I'm Maddy — I ♥ finance, tech, and making things.</p><br/>
-           <p>Started my career in audit at EY, moved into startup finance, and now work in FP&A at Reapit.
+           <p>Started my career in audit at EY, moved into startup finance, and now work in FP&amp;A at Reapit.
            Along the way: a YouTube channel, SQL, AI agents, web apps.</p><br/>
            <p>Based in Cape Town, South Africa. CA(SA) eligible.</p>`
   },
   experience: {
     label: 'Experience',
-    html: `<div class="exp"><div class="exp-co">Reapit</div><div class="exp-meta">FP&A Analyst · 2025 – Present</div>
-           <ul><li>FP&A at a large-scale PropTech software company</li><li>Forecasting, budgeting, and performance tracking</li></ul></div>
+    html: `<div class="exp"><div class="exp-co">Reapit</div><div class="exp-meta">FP&amp;A Analyst · 2026 – Present</div>
+           <ul><li>FP&amp;A at a large-scale PropTech software company</li><li>Forecasting, budgeting, and performance tracking</li></ul></div>
            <div class="exp"><div class="exp-co">Recess</div><div class="exp-meta">Finance Lead · US SaaS Startup · 2025</div>
-           <ul><li>End-to-end FP&A: forecasting, budgeting, performance tracking</li>
+           <ul><li>End-to-end FP&amp;A: forecasting, budgeting, performance tracking</li>
            <li>Partnered with CEO on runway, cost, and growth decisions</li>
            <li>Built financial models covering revenue, unit economics, scenarios</li>
            <li>Led finance ops across payments, pricing, and cost structures</li></ul></div>
            <div class="exp"><div class="exp-co">Maholla</div><div class="exp-meta">Lead Accountant · Part-Time · 2022–2025</div>
            <ul><li>Set up group financial accounts while completing CA(SA) articles</li>
-           <li>Led FP&A processes and performance tracking</li>
+           <li>Led FP&amp;A processes and performance tracking</li>
            <li>Oversaw pre-seed and seed rounds, raising $2M</li></ul></div>
            <div class="exp"><div class="exp-co">EY</div><div class="exp-meta">Audit Supervisor · CA(SA) Articles · 2022–2025</div>
            <ul><li>Completed 3-year CA(SA) articles at EY Cape Town</li>
@@ -434,7 +391,7 @@ const SECTIONS = {
     label: 'Skills',
     html: `<div class="skill-cols">
            <div class="skill-group"><h3>Finance</h3><ul>
-           <li>FP&A &amp; Forecasting</li><li>Financial Modelling</li><li>SaaS &amp; Unit Economics</li>
+           <li>FP&amp;A &amp; Forecasting</li><li>Financial Modelling</li><li>SaaS &amp; Unit Economics</li>
            <li>Strategic Finance</li><li>Revenue &amp; Margin Analysis</li><li>IFRS Reporting</li><li>Runway Management</li>
            </ul></div>
            <div class="skill-group"><h3>Tech</h3><ul>
@@ -466,98 +423,176 @@ const SECTIONS = {
     html: `<p><a class="sec-link" href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a></p><br/>
            <p><a class="sec-link" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a></p><br/>
            <p><a class="sec-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a></p>`
-  },
-  file: {
-    label: 'File',
-    html: `<p>Do you want to save changes to <strong>Maddy Silver's career</strong>?</p><br/>
-           <p style="font-size:11px;color:#888;">(There are no unsaved changes. Everything is going great.)</p>`
   }
 };
 
-// ── ERASER NAVIGATION ─────────────────────────────────────────
+// ── BOMB TRANSITION ───────────────────────────────────────────
 const canvas      = document.getElementById('canvas');
 const homeLayer   = document.getElementById('home-layer');
 const sectionLayer= document.getElementById('section-layer');
-const eraseCover  = document.getElementById('erase-cover');
-const eraserBlock = document.getElementById('eraser-block');
+const starsSvg    = document.getElementById('stars-svg');
+const bombSvg     = document.getElementById('bomb-svg');
 const statusEl    = document.getElementById('status');
 
 let currentView = 'home';
-let erasing = false;
+let transitioning = false;
 
 function navTo(id) {
-  if (erasing || id === currentView) return;
-  erasing = true;
-
-  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-  statusEl.textContent = id === 'home' ? 'For Help, click Help Topics on the Help menu.' : (SECTIONS[id]?.label || '');
-
-  eraseAndSwitch(id, () => { erasing = false; });
+  if (transitioning || id === currentView) return;
+  transitioning = true;
+  statusEl.textContent = id === 'home' ? 'For Help, click Help Topics on the Help menu.'
+                                        : (SECTIONS[id]?.label || '');
+  bombTransition(id, () => { transitioning = false; });
 }
 
-function eraseAndSwitch(target, done) {
+function bombTransition(target, done) {
   const cw = canvas.offsetWidth;
+  const ch = canvas.offsetHeight;
+  const maxR = Math.sqrt(cw * cw + ch * ch);
 
-  // Phase 1: eraser sweeps L→R, covering old content
-  eraseCover.style.width = '0';
-  eraseCover.style.transition = 'none';
-  eraserBlock.style.display = 'block';
-  eraserBlock.style.left = '-38px';
+  // Seed bomb positions scattered across canvas
+  const bombs = [
+    [cw*0.15, ch*0.25], [cw*0.75, ch*0.15], [cw*0.50, ch*0.55],
+    [cw*0.10, ch*0.75], [cw*0.88, ch*0.65], [cw*0.40, ch*0.10],
+    [cw*0.85, ch*0.40], [cw*0.30, ch*0.85], [cw*0.60, ch*0.80],
+  ];
 
-  let x = -38;
-  const speed1 = (cw + 76) / 55; // cover in ~55 frames
+  // Build circles
+  bombSvg.innerHTML = '';
+  bombSvg.style.display = 'block';
+  bombSvg.style.opacity = '1';
 
-  function sweep1() {
-    x += speed1;
-    eraseCover.style.width = Math.max(0, x) + 'px';
-    eraserBlock.style.left = x + 'px';
+  const circles = bombs.map(([x, y], i) => {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 0);
+    c.setAttribute('fill', '#000');
+    bombSvg.appendChild(c);
+    return { el: c, r: 0, maxR: maxR * 1.15, delay: Math.floor(i * 3) };
+  });
 
-    if (x < cw + 38) {
-      requestAnimationFrame(sweep1);
-    } else {
-      // Content is fully covered — swap layers
+  let swapped = false;
+  const growSpeed = maxR / 30;
+
+  function grow() {
+    let allFull = true;
+    circles.forEach(c => {
+      if (c.delay > 0) { c.delay--; allFull = false; return; }
+      if (c.r < c.maxR) {
+        c.r = Math.min(c.r + growSpeed, c.maxR);
+        c.el.setAttribute('r', c.r);
+        if (c.r < c.maxR) allFull = false;
+      }
+    });
+
+    // Swap content once enough is covered
+    if (!swapped && circles.filter(c => c.r >= c.maxR * 0.4).length >= 4) {
+      swapped = true;
       swapContent(target);
+    }
 
-      // Phase 2: eraser sweeps R→L, revealing new content
+    if (!allFull) { requestAnimationFrame(grow); }
+    else {
+      // Fade out the bomb overlay to reveal new content
+      bombSvg.style.transition = 'opacity 0.4s ease';
+      bombSvg.style.opacity = '0';
       setTimeout(() => {
-        let x2 = cw + 38;
-        const speed2 = (cw + 76) / 55;
-
-        function sweep2() {
-          x2 -= speed2;
-          eraseCover.style.width = Math.max(0, x2 - 38) + 'px';
-          eraserBlock.style.left = (x2 - 38) + 'px';
-
-          if (x2 > -38) {
-            requestAnimationFrame(sweep2);
-          } else {
-            eraserBlock.style.display = 'none';
-            eraseCover.style.width = '0';
-            done();
-          }
-        }
-        requestAnimationFrame(sweep2);
-      }, 80);
+        bombSvg.style.display = 'none';
+        bombSvg.style.transition = '';
+        bombSvg.innerHTML = '';
+        done();
+      }, 420);
     }
   }
-  requestAnimationFrame(sweep1);
+  requestAnimationFrame(grow);
 }
 
 function swapContent(target) {
   if (target === 'home') {
     sectionLayer.style.display = 'none';
     homeLayer.style.display = 'flex';
+    starsSvg.style.display = 'block';
     currentView = 'home';
   } else {
     homeLayer.style.display = 'none';
+    starsSvg.style.display = 'none'; // hide stars on section pages
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
-      <span class="back-btn" onclick="navTo('home')">← Back</span>
+      <span class="back-btn" onclick="navTo('home')">← Back to home</span>
       <div class="sec-title">${sec.label}</div>
       ${sec.html}`;
     sectionLayer.style.display = 'block';
     currentView = target;
+    if (target === 'file') initDrawCanvas();
   }
+}
+
+// ── DRAWING CANVAS ────────────────────────────────────────────
+function initDrawCanvas() {
+  const dc = document.getElementById('draw-canvas');
+  if (!dc) return;
+
+  // Size canvas to its CSS display size
+  const rect = dc.getBoundingClientRect();
+  dc.width  = Math.floor(rect.width)  || 600;
+  dc.height = Math.floor(rect.height) || 340;
+
+  const ctx = dc.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, dc.width, dc.height);
+
+  let drawing = false, lx = 0, ly = 0;
+
+  function getColor() { return document.getElementById('fg').style.background || '#000'; }
+  function getSize()  { return parseInt(document.getElementById('brush-size')?.value || 5); }
+
+  function startDraw(x, y) {
+    drawing = true;
+    lx = x; ly = y;
+    ctx.beginPath();
+    ctx.arc(x, y, getSize() / 2, 0, Math.PI * 2);
+    ctx.fillStyle = getColor();
+    ctx.fill();
+  }
+
+  function drawTo(x, y) {
+    if (!drawing) return;
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = getColor();
+    ctx.lineWidth   = getSize();
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+    ctx.stroke();
+    lx = x; ly = y;
+  }
+
+  dc.addEventListener('mousedown',  e => startDraw(e.offsetX, e.offsetY));
+  dc.addEventListener('mousemove',  e => drawTo(e.offsetX, e.offsetY));
+  dc.addEventListener('mouseup',    () => drawing = false);
+  dc.addEventListener('mouseleave', () => drawing = false);
+
+  dc.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const r = dc.getBoundingClientRect();
+    const t = e.touches[0];
+    startDraw(t.clientX - r.left, t.clientY - r.top);
+  }, { passive: false });
+  dc.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const r = dc.getBoundingClientRect();
+    const t = e.touches[0];
+    drawTo(t.clientX - r.left, t.clientY - r.top);
+  }, { passive: false });
+  dc.addEventListener('touchend', () => drawing = false);
+}
+
+function clearDraw() {
+  const dc = document.getElementById('draw-canvas');
+  if (!dc) return;
+  const ctx = dc.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, dc.width, dc.height);
 }
 
 // ── COLOUR PALETTE ────────────────────────────────────────────
@@ -576,7 +611,6 @@ swatches.forEach(c => {
   palette.appendChild(s);
 });
 
-// Tool clicks
 document.querySelectorAll('.tool').forEach(t => {
   t.addEventListener('click', function() {
     document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
@@ -585,18 +619,14 @@ document.querySelectorAll('.tool').forEach(t => {
 });
 
 // ── STARS ─────────────────────────────────────────────────────
-const starsSvg = document.getElementById('stars-svg');
-const dot      = document.getElementById('dot');
+const dot = document.getElementById('dot');
 
-// 5-pointed pentagram in one stroke, with hand-drawn jitter and wobbly bezier segments
 function pentagram(cx, cy, r, jitter) {
-  // Visit vertices: top → lower-right → upper-left → upper-right → lower-left → top
   const order = [270, 54, 198, 342, 126, 270].map(d => d * Math.PI / 180);
   const pts = order.map(a => [
     cx + r * Math.cos(a) + (Math.random() - 0.5) * jitter * 2,
     cy + r * Math.sin(a) + (Math.random() - 0.5) * jitter * 2
   ]);
-  // Use quadratic bezier segments with a wobble control point for scribbly look
   let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)} `;
   for (let i = 1; i < pts.length; i++) {
     const mx = (pts[i-1][0] + pts[i][0]) / 2 + (Math.random() - 0.5) * jitter * 3;
@@ -606,17 +636,18 @@ function pentagram(cx, cy, r, jitter) {
   return d;
 }
 
+// Positions kept to edges, away from centre content
 const starDefs = [
-  { px: 9,  py: 16, r: 32, colors: ['#2196f3','#e91e63'] },
-  { px: 83, py: 10, r: 22, colors: ['#ff9800','#e91e63'] },
-  { px: 89, py: 67, r: 26, colors: ['#f44336','#00bcd4'] },
-  { px: 13, py: 79, r: 36, colors: ['#9c27b0','#ffeb3b'] },
-  { px: 70, py: 85, r: 20, colors: ['#795548'] },
-  { px: 57, py: 16, r: 24, colors: ['#4caf50','#f44336'] },
-  { px: 4,  py: 50, r: 22, colors: ['#2196f3'] },
-  { px: 93, py: 38, r: 18, colors: ['#ffeb3b','#333'] },
-  { px: 43, py: 89, r: 24, colors: ['#9c27b0','#ffeb3b'] },
-  { px: 33, py: 7,  r: 18, colors: ['#9c27b0','#2196f3'] },
+  { px: 4,  py: 7,  r: 26, colors: ['#2196f3','#e91e63'] },
+  { px: 87, py: 6,  r: 20, colors: ['#ff9800','#e91e63'] },
+  { px: 91, py: 70, r: 22, colors: ['#f44336','#00bcd4'] },
+  { px: 5,  py: 82, r: 30, colors: ['#9c27b0','#ffeb3b'] },
+  { px: 75, py: 87, r: 17, colors: ['#795548'] },
+  { px: 28, py: 90, r: 22, colors: ['#4caf50','#f44336'] },
+  { px: 3,  py: 47, r: 18, colors: ['#2196f3'] },
+  { px: 95, py: 40, r: 15, colors: ['#ffeb3b','#333'] },
+  { px: 55, py: 91, r: 20, colors: ['#9c27b0','#ffeb3b'] },
+  { px: 20, py: 5,  r: 14, colors: ['#9c27b0','#2196f3'] },
 ];
 
 function animateStroke(d, color, sw, fo, onDone) {
@@ -636,19 +667,16 @@ function animateStroke(d, color, sw, fo, onDone) {
   path.style.strokeDashoffset = total;
 
   let drawn = 0;
-  // Slow, languid speed with slight randomness each frame
-  const baseSpeed = total / 90;
+  const base = total / 90;
 
   function frame() {
-    drawn = Math.min(drawn + baseSpeed * (0.7 + Math.random() * 0.6), total);
+    drawn = Math.min(drawn + base * (0.65 + Math.random() * 0.7), total);
     path.style.strokeDashoffset = total - drawn;
-
     const pt = path.getPointAtLength(drawn);
     dot.style.left = (pt.x - 2) + 'px';
     dot.style.top  = (pt.y - 2) + 'px';
-
     if (drawn < total) { requestAnimationFrame(frame); }
-    else { onDone && setTimeout(onDone, 200); }
+    else { onDone && setTimeout(onDone, 250); }
   }
   requestAnimationFrame(frame);
 }
@@ -664,8 +692,7 @@ function drawAllStars() {
     const cy = (s.py / 100) * ch;
     s.colors.forEach((color, ci) => {
       const rr  = ci === 0 ? s.r : s.r * 0.92;
-      const jit = ci === 0 ? 5 : 4;
-      const d   = pentagram(cx + ci*2, cy + ci, rr, jit);
+      const d   = pentagram(cx + ci*2, cy + ci, rr, ci===0 ? 5 : 4);
       queue.push({ d, color, sw: ci===0 ? 2.2 : 1.8, fo: ci===0 ? 0.2 : 0.12 });
     });
   });
