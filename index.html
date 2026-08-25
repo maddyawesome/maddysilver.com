@@ -3,440 +3,633 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Maddy Silver</title>
+  <title>untitled - Paint</title>
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #fff;
-      font-family: "Comic Sans MS", "Comic Sans", cursive;
-      min-height: 100vh;
-      overflow-x: hidden;
+      background: #008080;
+      font-family: 'MS Sans Serif', 'Arial', sans-serif;
+      font-size: 11px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
-    /* ── HERO ── */
-    .hero {
+    /* ── WINDOW ── */
+    .window {
+      background: #c0c0c0;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: 3px 3px 0 #000;
+      width: min(98vw, 860px);
+      height: min(96vh, 620px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TITLE BAR ── */
+    .title-bar {
+      background: linear-gradient(to right, #000080, #1084d0);
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .title-bar-text {
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .title-bar-controls { display: flex; gap: 2px; }
+    .tb-btn {
+      width: 16px;
+      height: 14px;
+      background: #c0c0c0;
+      border: 1px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      font-size: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .tb-btn:active { border-color: #808080 #ffffff #ffffff #808080; }
+
+    /* ── MENU BAR ── */
+    .menu-bar {
+      background: #c0c0c0;
+      display: flex;
+      padding: 2px 2px 0;
+      flex-shrink: 0;
+      border-bottom: 1px solid #808080;
+    }
+    .menu-item {
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      position: relative;
+    }
+    .menu-item:hover { background: #000080; color: white; }
+
+    /* ── SEPARATOR ── */
+    .sep {
+      height: 4px;
+      background: #c0c0c0;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #ffffff;
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN AREA ── */
+    .main-area {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      width: 54px;
+      background: #c0c0c0;
+      border-right: 2px solid;
+      border-color: #808080;
+      padding: 4px 3px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      align-content: start;
+      flex-shrink: 0;
+    }
+    .tool {
+      width: 22px;
+      height: 22px;
+      background: #c0c0c0;
+      border: 1px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 11px;
+      user-select: none;
+    }
+    .tool:hover { background: #d4d4d4; }
+    .tool.active { border-color: #808080 #ffffff #ffffff #808080; background: #b0b0b0; }
+
+    /* ── CANVAS SCROLL ── */
+    .canvas-scroll {
+      flex: 1;
+      overflow: auto;
+      background: #808080;
+      padding: 10px;
+    }
+    .canvas {
+      background: #fff;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 5rem 2rem 3rem;
-      text-align: center;
+      padding: 30px 20px 40px;
+      gap: 14px;
     }
 
-    .wordart-name {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: clamp(3.5rem, 12vw, 8rem);
-      font-weight: 900;
-      font-style: italic;
-      letter-spacing: -2px;
-      line-height: 1;
-      background: linear-gradient(
-        180deg,
-        #ff0000 0%,
-        #ff7700 18%,
-        #ffff00 36%,
-        #00cc00 54%,
-        #0000ff 72%,
-        #8b00ff 90%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter:
-        drop-shadow(3px 3px 0px rgba(0,0,0,0.25))
-        drop-shadow(6px 6px 0px rgba(0,0,0,0.1));
-      transform: skewX(-6deg);
-      margin-bottom: 0.5rem;
-      cursor: default;
-      transition: filter 0.2s, transform 0.2s;
-    }
-    .wordart-name:hover {
-      filter:
-        drop-shadow(4px 4px 0px rgba(255,0,128,0.4))
-        drop-shadow(8px 8px 0px rgba(0,0,255,0.2));
-      transform: skewX(-6deg) scale(1.03);
+    /* ── WORDART SVG ── */
+    .wordart-wrap {
+      width: min(480px, 90%);
+      overflow: visible;
+      margin-top: 20px;
     }
 
-    .hero-sub {
+    /* ── CANVAS TEXT ── */
+    .canvas-sub {
       font-family: "Comic Sans MS", cursive;
-      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-size: 13px;
       color: #444;
-      margin-top: 1rem;
-      margin-bottom: 0.6rem;
+      text-align: center;
+      line-height: 1.8;
     }
-
-    .hero-heart {
-      font-size: clamp(1rem, 2.5vw, 1.15rem);
-      color: #111;
-      margin-bottom: 2rem;
-    }
-
-    .hero-links {
+    .canvas-links {
       display: flex;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .hero-links a {
+      gap: 20px;
       font-family: "Comic Sans MS", cursive;
-      font-size: 0.95rem;
-      color: #0000EE;
-      text-decoration: underline;
+      font-size: 12px;
     }
-    .hero-links a:visited { color: #551A8B; }
-    .hero-links a:hover { color: #ff0080; }
-
-    /* ── DIVIDER ── */
-    .divider {
-      width: 90%;
-      max-width: 800px;
-      margin: 1.5rem auto;
-      border: none;
-      border-top: 2px solid #ccc;
+    .canvas-links a { color: #0000EE; text-decoration: underline; }
+    .canvas-links a:hover { color: #cc0066; }
+    .canvas-hint {
+      font-family: "Comic Sans MS", cursive;
+      font-size: 10px;
+      color: #aaa;
+      margin-top: 4px;
     }
 
-    /* ── SECTIONS ── */
-    .sections {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 2rem 4rem;
-    }
-
-    .section {
-      margin-bottom: 0.5rem;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .section-toggle {
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 1rem 1.5rem;
+    /* ── COLOUR SECTION ── */
+    .color-section {
+      background: #c0c0c0;
+      border-top: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 4px 6px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      text-align: left;
-      transition: background 0.15s;
-    }
-    .section-toggle:hover { background: #fafafa; }
-
-    .section-toggle .arrow {
-      font-size: 0.9rem;
-      color: #888;
-      transition: transform 0.25s;
+      gap: 8px;
       flex-shrink: 0;
-      margin-left: 1rem;
     }
-    .section.open .arrow { transform: rotate(90deg); }
+    .color-preview-box { width: 36px; height: 28px; position: relative; flex-shrink: 0; }
+    .color-fg {
+      width: 22px; height: 20px;
+      background: #000;
+      border: 1px solid; border-color: #808080 #fff #fff #808080;
+      position: absolute; top: 0; left: 0;
+    }
+    .color-bg {
+      width: 22px; height: 20px;
+      background: #fff;
+      border: 1px solid; border-color: #808080 #fff #fff #808080;
+      position: absolute; bottom: 0; right: 0;
+    }
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(28, 16px);
+      gap: 1px;
+    }
+    .swatch {
+      width: 16px; height: 13px;
+      border: 1px solid; border-color: #808080 #fff #fff #808080;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .swatch:hover { outline: 1px solid #000; }
 
-    .section-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-      padding: 0 1.5rem;
+    /* ── STATUS BAR ── */
+    .status-bar {
+      background: #c0c0c0;
+      border-top: 1px solid #808080;
+      padding: 2px 6px;
+      flex-shrink: 0;
+      display: flex;
+      gap: 4px;
     }
-    .section.open .section-body {
-      max-height: 2000px;
-      padding: 0 1.5rem 1.5rem;
-    }
-
-    /* WordArt styles for each section header */
-    .wa-experience {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      font-style: italic;
-      background: linear-gradient(180deg, #005ce6 0%, #00b4ff 50%, #005ce6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(2px 2px 0 rgba(0,0,150,0.3));
-      letter-spacing: 1px;
-    }
-
-    .wa-skills {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      background: linear-gradient(180deg, #a100ff 0%, #ff00c8 50%, #a100ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(2px 2px 0 rgba(100,0,100,0.3));
-      transform: skewX(-8deg);
-      display: inline-block;
-    }
-
-    .wa-youtube {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      font-style: italic;
-      background: linear-gradient(180deg, #ff2200 0%, #ff8800 50%, #ffdd00 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(2px 3px 0 rgba(180,0,0,0.25));
-      letter-spacing: 2px;
+    .status-panel {
+      border: 1px solid; border-color: #808080 #fff #fff #808080;
+      padding: 1px 6px;
+      font-size: 11px;
+      flex: 1;
     }
 
-    .wa-education {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      background: linear-gradient(180deg, #006600 0%, #00cc44 50%, #006600 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(2px 2px 0 rgba(0,80,0,0.3));
-      letter-spacing: 1px;
+    /* ── OVERLAY ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
     }
+    .overlay.active { display: flex; }
 
-    .wa-certs {
-      font-family: Arial Black, Arial, sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      font-style: italic;
-      background: linear-gradient(180deg, #cc8800 0%, #ffdd00 40%, #ff8800 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(2px 2px 0 rgba(150,80,0,0.3));
+    /* ── DIALOG ── */
+    .dialog {
+      background: #c0c0c0;
+      border: 2px solid; border-color: #fff #808080 #808080 #fff;
+      box-shadow: 4px 4px 0 #000;
+      width: min(92vw, 500px);
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
     }
-
-    /* ── CONTENT STYLES ── */
-    .exp { margin-bottom: 1.5rem; }
-    .exp:last-child { margin-bottom: 0; }
-    .exp-header {
+    .dialog-title {
+      background: linear-gradient(to right, #000080, #1084d0);
+      padding: 3px 6px;
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-bottom: 0.2rem;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      flex-shrink: 0;
     }
-    .exp-company { font-weight: bold; font-size: 1rem; }
-    .exp-date { font-size: 0.85rem; color: #888; }
-    .exp-role { font-size: 0.88rem; color: #666; margin-bottom: 0.4rem; }
-    .exp ul { padding-left: 1.2rem; }
-    .exp ul li { font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.15rem; }
-
-    .skill-cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+    .d-close {
+      width: 16px; height: 14px;
+      background: #c0c0c0;
+      border: 1px solid; border-color: #fff #808080 #808080 #fff;
+      font-size: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
     }
-    .skill-group h3 { font-size: 0.95rem; margin-bottom: 0.4rem; text-decoration: underline; }
-    .skill-group ul { padding-left: 1.2rem; }
-    .skill-group ul li { font-size: 0.88rem; line-height: 1.7; }
-
-    .yt-block p { font-size: 0.95rem; line-height: 1.7; }
-    .yt-block a { color: #0000EE; }
-
-    .edu-item { margin-bottom: 1rem; }
-    .edu-item strong { font-size: 0.95rem; }
-    .edu-item span { display: block; font-size: 0.85rem; color: #666; }
-
-    .cert-item { margin-bottom: 0.8rem; }
-    .cert-item strong { font-size: 0.95rem; }
-    .cert-item span { display: block; font-size: 0.85rem; color: #666; }
-
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #bbb;
-      padding: 2rem;
+    .d-close:active { border-color: #808080 #fff #fff #808080; }
+    .dialog-body {
+      padding: 14px 16px;
+      overflow-y: auto;
       font-family: "Comic Sans MS", cursive;
+      font-size: 12px;
+      line-height: 1.7;
+      flex: 1;
     }
+    .dialog-footer {
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      border-top: 1px solid #808080;
+      flex-shrink: 0;
+    }
+    .win-btn {
+      min-width: 70px;
+      padding: 3px 10px;
+      background: #c0c0c0;
+      border: 2px solid; border-color: #fff #808080 #808080 #fff;
+      font-family: "Comic Sans MS", cursive;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .win-btn:active { border-color: #808080 #fff #fff #808080; }
 
-    @media (max-width: 500px) {
-      .skill-cols { grid-template-columns: 1fr; }
-    }
+    /* ── DIALOG CONTENT ── */
+    .exp { margin-bottom: 14px; }
+    .exp-co { font-weight: bold; font-size: 13px; }
+    .exp-meta { font-size: 11px; color: #666; margin-bottom: 4px; }
+    .exp ul { padding-left: 16px; }
+    .exp li { font-size: 12px; margin-bottom: 2px; }
+    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .skill-group h3 { font-weight: bold; margin-bottom: 6px; border-bottom: 1px solid #aaa; padding-bottom: 2px; }
+    .skill-group ul { padding-left: 14px; }
+    .skill-group li { font-size: 12px; line-height: 1.8; }
+    .edu-item { margin-bottom: 10px; }
+    .edu-item strong { display: block; font-size: 12px; }
+    .edu-item span { font-size: 11px; color: #666; }
+    .d-link { color: #0000EE; text-decoration: underline; }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="wordart-name">Maddy Silver</div>
-    <p class="hero-sub">FP&A Analyst &middot; Cape Town, South Africa</p>
-    <p class="hero-heart">I ♥ finance, tech, and making things.</p>
-    <div class="hero-links">
-      <a href="mailto:madzsilver@gmail.com">Email</a>
-      <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
-      <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
+<!-- ══ PAINT WINDOW ══ -->
+<div class="window">
+
+  <div class="title-bar">
+    <div class="title-bar-text">🎨 untitled - Paint</div>
+    <div class="title-bar-controls">
+      <button class="tb-btn">_</button>
+      <button class="tb-btn">□</button>
+      <button class="tb-btn" onclick="open('file')">✕</button>
     </div>
   </div>
 
-  <hr class="divider" />
-
-  <!-- ACCORDION SECTIONS -->
-  <div class="sections">
-
-    <div class="section" id="s-experience">
-      <button class="section-toggle" onclick="toggle('s-experience')">
-        <span class="wa-experience">Experience</span>
-        <span class="arrow">▶</span>
-      </button>
-      <div class="section-body">
-        <div class="exp">
-          <div class="exp-header">
-            <span class="exp-company">Reapit</span>
-            <span class="exp-date">2025 – Present</span>
-          </div>
-          <div class="exp-role">FP&A Analyst</div>
-          <ul>
-            <li>Financial planning and analysis at a large-scale PropTech software company</li>
-            <li>Forecasting, budgeting, and performance tracking</li>
-          </ul>
-        </div>
-        <div class="exp">
-          <div class="exp-header">
-            <span class="exp-company">Recess</span>
-            <span class="exp-date">2025</span>
-          </div>
-          <div class="exp-role">Finance Lead · US SaaS Startup</div>
-          <ul>
-            <li>End-to-end FP&A including forecasting, budgeting, and performance tracking</li>
-            <li>Partnered with the CEO on strategic decisions — runway, cost, growth</li>
-            <li>Built financial models covering revenue, unit economics, and scenario analysis</li>
-            <li>Led finance operations across payments, pricing, and cost structures</li>
-          </ul>
-        </div>
-        <div class="exp">
-          <div class="exp-header">
-            <span class="exp-company">Maholla</span>
-            <span class="exp-date">2022 – 2025</span>
-          </div>
-          <div class="exp-role">Lead Accountant · Part-Time</div>
-          <ul>
-            <li>Set up and managed group financial accounts while completing CA(SA) articles</li>
-            <li>Led FP&A processes and performance tracking</li>
-            <li>Oversaw pre-seed and seed rounds, raising $2M in capital</li>
-          </ul>
-        </div>
-        <div class="exp">
-          <div class="exp-header">
-            <span class="exp-company">EY</span>
-            <span class="exp-date">2022 – 2025</span>
-          </div>
-          <div class="exp-role">Audit Supervisor · CA(SA) Articles</div>
-          <ul>
-            <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
-            <li>Led audit teams for one of South Africa's largest financial services companies</li>
-            <li>Ensured IFRS compliance; managed and mentored junior auditors</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="s-skills">
-      <button class="section-toggle" onclick="toggle('s-skills')">
-        <span class="wa-skills">Skills</span>
-        <span class="arrow">▶</span>
-      </button>
-      <div class="section-body">
-        <div class="skill-cols">
-          <div class="skill-group">
-            <h3>Finance</h3>
-            <ul>
-              <li>FP&A & Forecasting</li>
-              <li>Financial Modelling</li>
-              <li>SaaS & Unit Economics</li>
-              <li>Strategic Finance</li>
-              <li>Revenue & Margin Analysis</li>
-              <li>IFRS Reporting</li>
-              <li>Runway Management</li>
-            </ul>
-          </div>
-          <div class="skill-group">
-            <h3>Tech</h3>
-            <ul>
-              <li>SQL</li>
-              <li>Google Sheets / Excel</li>
-              <li>Metabase</li>
-              <li>AI Agent Building</li>
-              <li>Claude Code</li>
-              <li>Xero · Sage · Deel</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="s-youtube">
-      <button class="section-toggle" onclick="toggle('s-youtube')">
-        <span class="wa-youtube">YouTube</span>
-        <span class="arrow">▶</span>
-      </button>
-      <div class="section-body">
-        <div class="yt-block">
-          <p>I run <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a> — started as CA(SA) study content, evolved into articles diaries, pivoting out of audit, and general finance + career advice. It's been a whole journey.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="s-education">
-      <button class="section-toggle" onclick="toggle('s-education')">
-        <span class="wa-education">Education</span>
-        <span class="arrow">▶</span>
-      </button>
-      <div class="section-body">
-        <div class="edu-item">
-          <strong>University of Cape Town</strong>
-          <span>Post-Graduate Diploma in Accounting · 2021 – 2022</span>
-        </div>
-        <div class="edu-item">
-          <strong>University of Cape Town</strong>
-          <span>BCom, Chartered Accounting · 2019 – 2021</span>
-        </div>
-        <div class="edu-item">
-          <strong>University of Cape Town</strong>
-          <span>Bachelor of Business Science, Actuarial Science · 2017 – 2019</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="section" id="s-certs">
-      <button class="section-toggle" onclick="toggle('s-certs')">
-        <span class="wa-certs">Certifications</span>
-        <span class="arrow">▶</span>
-      </button>
-      <div class="section-body">
-        <div class="cert-item">
-          <strong>Financial Modeling & Valuation Analyst (FMVA®)</strong>
-          <span>Corporate Finance Institute · 2025</span>
-        </div>
-        <div class="cert-item">
-          <strong>Analyze Data with SQL</strong>
-          <span>Codecademy · 2025</span>
-        </div>
-        <div class="cert-item">
-          <strong>Assessment of Professional Competence (APC)</strong>
-          <span>SAICA · 2024</span>
-        </div>
-        <div class="cert-item">
-          <strong>Initial Test of Competence (ITC)</strong>
-          <span>SAICA · 2022</span>
-        </div>
-      </div>
-    </div>
-
+  <div class="menu-bar">
+    <div class="menu-item" onclick="open('file')">File</div>
+    <div class="menu-item" onclick="open('about')">About Maddy</div>
+    <div class="menu-item" onclick="open('experience')">Experience</div>
+    <div class="menu-item" onclick="open('skills')">Skills</div>
+    <div class="menu-item" onclick="open('youtube')">YouTube</div>
+    <div class="menu-item" onclick="open('education')">Education</div>
+    <div class="menu-item" onclick="open('contact')">Contact</div>
   </div>
 
-  <footer>maddysilver.com</footer>
+  <div class="sep"></div>
 
-  <script>
-    function toggle(id) {
-      const section = document.getElementById(id);
-      section.classList.toggle('open');
-    }
-  </script>
+  <div class="main-area">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="tool" title="Free select">⬚</div>
+      <div class="tool" title="Select">▭</div>
+      <div class="tool" title="Eraser">◻</div>
+      <div class="tool" title="Fill">🪣</div>
+      <div class="tool" title="Eyedropper">💉</div>
+      <div class="tool" title="Zoom">🔍</div>
+      <div class="tool active" title="Pencil">✏</div>
+      <div class="tool" title="Brush">🖌</div>
+      <div class="tool" title="Airbrush">💨</div>
+      <div class="tool" title="Text" style="font-weight:bold;font-size:13px;">A</div>
+      <div class="tool" title="Line">╱</div>
+      <div class="tool" title="Curve">〜</div>
+      <div class="tool" title="Rectangle">□</div>
+      <div class="tool" title="Polygon">⬠</div>
+      <div class="tool" title="Ellipse">○</div>
+      <div class="tool" title="Round rect">▢</div>
+    </div>
+
+    <!-- Canvas -->
+    <div class="canvas-scroll">
+      <div class="canvas">
+
+        <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+          <defs>
+            <path id="arc" d="M 10,148 Q 240,30 470,148" />
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#cc00cc"/>
+              <stop offset="20%"  stop-color="#ff4400"/>
+              <stop offset="40%"  stop-color="#ffcc00"/>
+              <stop offset="60%"  stop-color="#00bb44"/>
+              <stop offset="80%"  stop-color="#0044ff"/>
+              <stop offset="100%" stop-color="#cc00cc"/>
+            </linearGradient>
+          </defs>
+          <!-- shadow -->
+          <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
+                fill="rgba(0,0,0,0.18)" letter-spacing="1">
+            <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
+          </text>
+          <!-- main -->
+          <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
+                fill="url(#grad)" letter-spacing="1"
+                style="filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
+            <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
+          </text>
+        </svg>
+
+        <p class="canvas-sub">FP&amp;A Analyst &middot; Cape Town, South Africa</p>
+        <p class="canvas-sub" style="color:#777;">I ♥ finance, tech, and making things.</p>
+
+        <div class="canvas-links">
+          <a href="mailto:madzsilver@gmail.com">Email</a>
+          <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
+          <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
+        </div>
+
+        <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="sep"></div>
+
+  <!-- Colour palette -->
+  <div class="color-section">
+    <div class="color-preview-box">
+      <div class="color-fg" id="fg"></div>
+      <div class="color-bg" id="bg"></div>
+    </div>
+    <div class="palette" id="palette"></div>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <div class="status-panel" id="status">For Help, click Help Topics on the Help menu.</div>
+  </div>
+
+</div>
+
+<!-- ══ DIALOGS ══ -->
+
+<div class="overlay" id="d-about">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>ℹ️ About Maddy</span>
+      <button class="d-close" onclick="close('about')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p>I'm Maddy — I ♥ finance, tech, and making things.</p><br/>
+      <p>Started my career in audit at EY, moved into startup finance, and now work in FP&amp;A at Reapit. Along the way: a YouTube channel, SQL, AI agents, web apps.</p><br/>
+      <p>Based in Cape Town, South Africa. CA(SA) eligible.</p>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('about')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-experience">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>💼 Experience</span>
+      <button class="d-close" onclick="close('experience')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <div class="exp">
+        <div class="exp-co">Reapit</div>
+        <div class="exp-meta">FP&amp;A Analyst · 2025 – Present</div>
+        <ul><li>FP&amp;A at a large-scale PropTech software company</li><li>Forecasting, budgeting, and performance tracking</li></ul>
+      </div>
+      <div class="exp">
+        <div class="exp-co">Recess</div>
+        <div class="exp-meta">Finance Lead · US SaaS Startup · 2025</div>
+        <ul>
+          <li>End-to-end FP&amp;A: forecasting, budgeting, performance tracking</li>
+          <li>Partnered with CEO on runway, cost, and growth decisions</li>
+          <li>Built financial models covering revenue, unit economics, scenarios</li>
+          <li>Led finance ops across payments, pricing, and cost structures</li>
+        </ul>
+      </div>
+      <div class="exp">
+        <div class="exp-co">Maholla</div>
+        <div class="exp-meta">Lead Accountant · Part-Time · 2022 – 2025</div>
+        <ul>
+          <li>Set up group financial accounts while completing CA(SA) articles</li>
+          <li>Led FP&amp;A processes and performance tracking</li>
+          <li>Oversaw pre-seed and seed rounds, raising $2M</li>
+        </ul>
+      </div>
+      <div class="exp">
+        <div class="exp-co">EY</div>
+        <div class="exp-meta">Audit Supervisor · CA(SA) Articles · 2022 – 2025</div>
+        <ul>
+          <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
+          <li>Led audit teams for one of SA's largest financial services companies</li>
+          <li>Ensured IFRS compliance; managed and mentored junior auditors</li>
+        </ul>
+      </div>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('experience')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-skills">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>🛠 Skills</span>
+      <button class="d-close" onclick="close('skills')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <div class="skill-cols">
+        <div class="skill-group">
+          <h3>Finance</h3>
+          <ul>
+            <li>FP&amp;A &amp; Forecasting</li>
+            <li>Financial Modelling</li>
+            <li>SaaS &amp; Unit Economics</li>
+            <li>Strategic Finance</li>
+            <li>Revenue &amp; Margin Analysis</li>
+            <li>IFRS Reporting</li>
+            <li>Runway Management</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Tech</h3>
+          <ul>
+            <li>SQL</li>
+            <li>Google Sheets / Excel</li>
+            <li>Metabase</li>
+            <li>AI Agent Building</li>
+            <li>Claude Code</li>
+            <li>Xero · Sage · Deel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('skills')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-youtube">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>▶️ YouTube</span>
+      <button class="d-close" onclick="close('youtube')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p>I run <strong>@accountingwithmaddy</strong> on YouTube.</p><br/>
+      <p>Started as CA(SA) study content, evolved into articles diaries, pivoting out of audit, and general finance + career advice. It's been a whole journey.</p><br/>
+      <p><a class="d-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">→ Watch on YouTube</a></p>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('youtube')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-education">
+  <div class="dialog">
+    <div class="dialog-title">
+      <span>🎓 Education &amp; Certifications</span>
+      <button class="d-close" onclick="close('education')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p style="font-weight:bold;margin-bottom:8px;">Education</p>
+      <div class="edu-item"><strong>University of Cape Town</strong><span>Post-Graduate Diploma in Accounting · 2021–2022</span></div>
+      <div class="edu-item"><strong>University of Cape Town</strong><span>BCom, Chartered Accounting · 2019–2021</span></div>
+      <div class="edu-item"><strong>University of Cape Town</strong><span>BBusSci, Actuarial Science · 2017–2019</span></div>
+      <br/>
+      <p style="font-weight:bold;margin-bottom:8px;">Certifications</p>
+      <div class="edu-item"><strong>FMVA® — Corporate Finance Institute</strong><span>2025</span></div>
+      <div class="edu-item"><strong>Analyze Data with SQL — Codecademy</strong><span>2025</span></div>
+      <div class="edu-item"><strong>APC — SAICA</strong><span>2024</span></div>
+      <div class="edu-item"><strong>ITC — SAICA</strong><span>2022</span></div>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('education')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-contact">
+  <div class="dialog" style="max-width:340px;">
+    <div class="dialog-title">
+      <span>📧 Contact</span>
+      <button class="d-close" onclick="close('contact')">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p><a class="d-link" href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a></p><br/>
+      <p><a class="d-link" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a></p><br/>
+      <p><a class="d-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a></p>
+    </div>
+    <div class="dialog-footer"><button class="win-btn" onclick="close('contact')">OK</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="d-file">
+  <div class="dialog" style="max-width:340px;">
+    <div class="dialog-title">
+      <span>⚠️ Microsoft Paint</span>
+      <button class="d-close" onclick="close('file')">✕</button>
+    </div>
+    <div class="dialog-body" style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:2.5rem;">⚠️</span>
+      <p>Do you want to save changes to<br/><strong>Maddy Silver's career</strong>?</p>
+    </div>
+    <div class="dialog-footer">
+      <button class="win-btn" onclick="close('file')">Yes</button>
+      <button class="win-btn" onclick="close('file')">No</button>
+      <button class="win-btn" onclick="close('file')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Colour palette
+  const swatches = [
+    '#000000','#808080','#800000','#808000','#008000','#008080','#000080','#800080',
+    '#c0c0c0','#ffffff','#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff',
+    '#ff8040','#804000','#408040','#408080','#4080ff','#8040ff',
+    '#ff8080','#ffff80','#80ff80','#80ffff','#8080ff','#ff80ff'
+  ];
+  const palette = document.getElementById('palette');
+  swatches.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.style.background = c;
+    s.onclick = () => document.getElementById('fg').style.background = c;
+    palette.appendChild(s);
+  });
+
+  // Dialog open/close (avoid shadowing window.open)
+  function open(id) {
+    document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
+    document.getElementById('d-' + id).classList.add('active');
+    document.getElementById('status').textContent = id.charAt(0).toUpperCase() + id.slice(1);
+  }
+  function close(id) {
+    document.getElementById('d-' + id).classList.remove('active');
+    document.getElementById('status').textContent = 'For Help, click Help Topics on the Help menu.';
+  }
+
+  // Click overlay background to close
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
+  });
+
+  // Tool clicks
+  document.querySelectorAll('.tool').forEach(t => {
+    t.addEventListener('click', function() {
+      document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
 
 </body>
 </html>
