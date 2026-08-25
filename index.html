@@ -87,19 +87,12 @@
       position: relative; overflow: hidden;
     }
 
-    /* Stardew character */
-    #character {
-      height: 80px;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-    }
-
     /* Home layer */
     #home-layer {
       position: absolute; inset: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 6px; padding: 20px; z-index: 1;
+      gap: 12px; padding: 20px; z-index: 1;
     }
 
     /* Section layer — white bg so stars don't bleed through */
@@ -291,7 +284,6 @@
 
         <!-- HOME LAYER -->
         <div id="home-layer">
-          <img id="character" src="character.png" alt=""/>
           <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
             <defs>
               <path id="arc" d="M 10,148 Q 240,30 470,148" />
@@ -473,6 +465,7 @@ function swapContent(target) {
   } else {
     homeLayer.style.display = 'none';
     starsSvg.style.display = 'none';
+    dotGen++; // cancel any in-flight star/rainbow dot animation
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
       <span class="back-btn" onclick="navTo('home')">← Back to home</span>
@@ -585,6 +578,7 @@ document.querySelectorAll('.tool').forEach(t => {
 
 // ── RAINBOWS (section page decorations) ───────────────────────
 const dot = document.getElementById('dot');
+let dotGen = 0; // increment to cancel any in-flight dot animation
 
 const RAINBOW = ['#ff0000','#ff8800','#ffff00','#00cc00','#0055ff','#8800cc'];
 
@@ -595,27 +589,22 @@ function drawRainbows() {
   decoSvg.setAttribute('height', ch);
   decoSvg.setAttribute('viewBox', `0 0 ${cw} ${ch}`);
 
-  // Two rainbow clusters: top-right corner + bottom-left corner
   const arcs = [];
-
-  // Top-right corner arcs (quarter circles, center at top-right)
   RAINBOW.forEach((color, i) => {
     const r = 30 + i * 18;
-    // Arc from (cw-r, 0) to (cw, r), center at (cw, 0)
     arcs.push({ d: `M ${cw-r},4 A ${r},${r} 0 0,1 ${cw-4},${r}`, color, sw: 5 });
   });
-
-  // Bottom-left corner arcs
   RAINBOW.forEach((color, i) => {
     const r = 25 + i * 16;
-    // Arc from (0, ch-r) to (r, ch), center at (0, ch)
     arcs.push({ d: `M 4,${ch-r} A ${r},${r} 0 0,0 ${r},${ch-4}`, color, sw: 4 });
   });
 
   dot.style.opacity = '1';
+  const gen = ++dotGen;
 
   let i = 0;
   function next() {
+    if (gen !== dotGen) { dot.style.opacity = '0'; return; }
     if (i >= arcs.length) { dot.style.opacity = '0'; return; }
     const a = arcs[i++];
     const ns = 'http://www.w3.org/2000/svg';
@@ -632,9 +621,10 @@ function drawRainbows() {
     path.style.strokeDashoffset = total;
 
     let drawn = 0;
-    const speed = total / 90;
+    const speed = total / 60;
 
     function frame() {
+      if (gen !== dotGen) { dot.style.opacity = '0'; return; }
       drawn = Math.min(drawn + speed * (0.7 + Math.random() * 0.6), total);
       path.style.strokeDashoffset = total - drawn;
       const pt = path.getPointAtLength(drawn);
@@ -695,10 +685,12 @@ function animateStroke(d, color, sw, fo, onDone) {
   path.style.strokeDasharray  = total;
   path.style.strokeDashoffset = total;
 
+  const gen = dotGen;
   let drawn = 0;
   const base = total / 90;
 
   function frame() {
+    if (gen !== dotGen) { dot.style.opacity = '0'; return; }
     drawn = Math.min(drawn + base * (0.65 + Math.random() * 0.7), total);
     path.style.strokeDashoffset = total - drawn;
     const pt = path.getPointAtLength(drawn);
