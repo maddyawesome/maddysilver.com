@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maddy Silver</title>
   <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&display=swap" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -102,7 +103,7 @@
       background: #fff;
       padding: 20px 24px;
       overflow-y: auto;
-      font-family: "Comic Sans MS", cursive;
+      font-family: "Comic Sans MS", "Comic Neue", cursive;
       font-size: 12px; line-height: 1.7;
       z-index: 1;
     }
@@ -137,16 +138,16 @@
     .sparkle-wrap svg { width: 100%; overflow: visible; }
 
     .canvas-sub {
-      font-family: "Comic Sans MS", cursive;
+      font-family: "Comic Sans MS", "Comic Neue", cursive;
       font-size: 13px; color: #444; text-align: center;
     }
     .canvas-links {
       display: flex; gap: 20px;
-      font-family: "Comic Sans MS", cursive; font-size: 12px;
+      font-family: "Comic Sans MS", "Comic Neue", cursive; font-size: 12px;
     }
     .canvas-links a { color: #0000EE; text-decoration: underline; }
     .canvas-links a:hover { color: #cc0066; }
-    .canvas-hint { font-family: "Comic Sans MS", cursive; font-size: 10px; color: #aaa; }
+    .canvas-hint { font-family: "Comic Sans MS", "Comic Neue", cursive; font-size: 10px; color: #aaa; }
 
     /* Section content */
     .sec-title {
@@ -192,7 +193,7 @@
     .win-btn {
       padding: 2px 10px; background: #c0c0c0;
       border: 2px solid; border-color: #fff #808080 #808080 #fff;
-      font-family: "Comic Sans MS", cursive; font-size: 11px; cursor: pointer;
+      font-family: "Comic Sans MS", "Comic Neue", cursive; font-size: 11px; cursor: pointer;
     }
     .win-btn:active { border-color: #808080 #fff #fff #808080; }
 
@@ -232,10 +233,12 @@
     }
 
     @media (max-width: 600px) {
-      body { align-items: stretch; justify-content: stretch; }
+      body { padding: 0; }
 
       .window {
-        width: 100vw; height: 100dvh;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
         box-shadow: none; border: none;
       }
 
