@@ -89,9 +89,9 @@
 
     /* Stardew character */
     #character {
-      position: absolute; bottom: 0; right: 18px;
-      height: 150px; image-rendering: pixelated;
-      z-index: 2; pointer-events: none;
+      height: 110px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
     /* Home layer */
@@ -292,6 +292,7 @@
 
         <!-- HOME LAYER -->
         <div id="home-layer">
+          <img id="character" src="character.png" alt=""/>
           <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
             <defs>
               <path id="arc" d="M 10,148 Q 240,30 470,148" />
@@ -442,7 +443,6 @@ const sectionLayer= document.getElementById('section-layer');
 const starsSvg    = document.getElementById('stars-svg');
 const decoSvg     = document.getElementById('deco-svg');
 const flash       = document.getElementById('flash');
-const charImg     = document.getElementById('character');
 const statusEl    = document.getElementById('status');
 
 let currentView = 'home';
@@ -469,12 +469,10 @@ function swapContent(target) {
     sectionLayer.style.display = 'none';
     decoSvg.style.display = 'none';
     homeLayer.style.display = 'flex';
-    charImg.style.display = 'block';
     starsSvg.style.display = 'block';
     currentView = 'home';
   } else {
     homeLayer.style.display = 'none';
-    charImg.style.display = 'none';
     starsSvg.style.display = 'none';
     const sec = SECTIONS[target];
     sectionLayer.innerHTML = `
