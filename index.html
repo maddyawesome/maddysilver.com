@@ -9,251 +9,434 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #ffffff;
-      color: #111;
+      background: #fff;
       font-family: "Comic Sans MS", "Comic Sans", cursive;
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 4rem 2rem;
-      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    h1 {
-      font-size: 3.5rem;
-      font-weight: bold;
-      margin-bottom: 0.2rem;
-    }
-
-    .tagline {
-      font-size: 1.1rem;
-      color: #555;
-      margin-bottom: 2.5rem;
-    }
-
-    .bio {
-      font-size: 1.15rem;
-      margin-bottom: 3rem;
-      max-width: 560px;
-    }
-
-    .links {
+    /* ── HERO ── */
+    .hero {
       display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 4rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem 3rem;
+      text-align: center;
     }
 
-    .links a {
+    .wordart-name {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -2px;
+      line-height: 1;
+      background: linear-gradient(
+        180deg,
+        #ff0000 0%,
+        #ff7700 18%,
+        #ffff00 36%,
+        #00cc00 54%,
+        #0000ff 72%,
+        #8b00ff 90%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter:
+        drop-shadow(3px 3px 0px rgba(0,0,0,0.25))
+        drop-shadow(6px 6px 0px rgba(0,0,0,0.1));
+      transform: skewX(-6deg);
+      margin-bottom: 0.5rem;
+      cursor: default;
+      transition: filter 0.2s, transform 0.2s;
+    }
+    .wordart-name:hover {
+      filter:
+        drop-shadow(4px 4px 0px rgba(255,0,128,0.4))
+        drop-shadow(8px 8px 0px rgba(0,0,255,0.2));
+      transform: skewX(-6deg) scale(1.03);
+    }
+
+    .hero-sub {
+      font-family: "Comic Sans MS", cursive;
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: #444;
+      margin-top: 1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-heart {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
       color: #111;
-      text-decoration: underline;
-      font-size: 1rem;
+      margin-bottom: 2rem;
     }
 
-    .links a:hover { color: #ff6b9d; }
+    .hero-links {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-    hr {
+    .hero-links a {
+      font-family: "Comic Sans MS", cursive;
+      font-size: 0.95rem;
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    .hero-links a:visited { color: #551A8B; }
+    .hero-links a:hover { color: #ff0080; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 90%;
+      max-width: 800px;
+      margin: 1.5rem auto;
       border: none;
-      border-top: 1px solid #ddd;
-      margin: 3rem 0;
+      border-top: 2px solid #ccc;
     }
 
-    h2 {
-      font-size: 1.4rem;
-      margin-bottom: 1.5rem;
-      text-decoration: underline;
-      text-underline-offset: 4px;
+    /* ── SECTIONS ── */
+    .sections {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
     }
 
-    /* Experience */
-    .exp { margin-bottom: 2rem; }
+    .section {
+      margin-bottom: 0.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .section-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .section-toggle:hover { background: #fafafa; }
+
+    .section-toggle .arrow {
+      font-size: 0.9rem;
+      color: #888;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+    .section.open .arrow { transform: rotate(90deg); }
+
+    .section-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 1.5rem;
+    }
+    .section.open .section-body {
+      max-height: 2000px;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    /* WordArt styles for each section header */
+    .wa-experience {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      font-style: italic;
+      background: linear-gradient(180deg, #005ce6 0%, #00b4ff 50%, #005ce6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(2px 2px 0 rgba(0,0,150,0.3));
+      letter-spacing: 1px;
+    }
+
+    .wa-skills {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(180deg, #a100ff 0%, #ff00c8 50%, #a100ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(2px 2px 0 rgba(100,0,100,0.3));
+      transform: skewX(-8deg);
+      display: inline-block;
+    }
+
+    .wa-youtube {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      font-style: italic;
+      background: linear-gradient(180deg, #ff2200 0%, #ff8800 50%, #ffdd00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(2px 3px 0 rgba(180,0,0,0.25));
+      letter-spacing: 2px;
+    }
+
+    .wa-education {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(180deg, #006600 0%, #00cc44 50%, #006600 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(2px 2px 0 rgba(0,80,0,0.3));
+      letter-spacing: 1px;
+    }
+
+    .wa-certs {
+      font-family: Arial Black, Arial, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      font-style: italic;
+      background: linear-gradient(180deg, #cc8800 0%, #ffdd00 40%, #ff8800 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(2px 2px 0 rgba(150,80,0,0.3));
+    }
+
+    /* ── CONTENT STYLES ── */
+    .exp { margin-bottom: 1.5rem; }
+    .exp:last-child { margin-bottom: 0; }
     .exp-header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.3rem;
+      margin-bottom: 0.2rem;
     }
-    .exp-company { font-weight: bold; font-size: 1.05rem; }
-    .exp-date { font-size: 0.9rem; color: #777; }
-    .exp-role { font-size: 0.95rem; color: #555; margin-bottom: 0.5rem; }
+    .exp-company { font-weight: bold; font-size: 1rem; }
+    .exp-date { font-size: 0.85rem; color: #888; }
+    .exp-role { font-size: 0.88rem; color: #666; margin-bottom: 0.4rem; }
     .exp ul { padding-left: 1.2rem; }
-    .exp ul li { font-size: 0.92rem; margin-bottom: 0.2rem; }
+    .exp ul li { font-size: 0.88rem; line-height: 1.6; margin-bottom: 0.15rem; }
 
-    /* Skills */
     .skill-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 1.5rem;
     }
-    .skill-group h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+    .skill-group h3 { font-size: 0.95rem; margin-bottom: 0.4rem; text-decoration: underline; }
     .skill-group ul { padding-left: 1.2rem; }
-    .skill-group ul li { font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .skill-group ul li { font-size: 0.88rem; line-height: 1.7; }
 
-    /* YouTube */
-    .yt-block { margin-bottom: 1rem; }
-    .yt-block p { font-size: 0.95rem; color: #444; margin-bottom: 0.8rem; }
+    .yt-block p { font-size: 0.95rem; line-height: 1.7; }
+    .yt-block a { color: #0000EE; }
 
-    /* Education & Certs */
     .edu-item { margin-bottom: 1rem; }
-    .edu-item strong { display: block; }
-    .edu-item span { font-size: 0.88rem; color: #666; }
+    .edu-item strong { font-size: 0.95rem; }
+    .edu-item span { display: block; font-size: 0.85rem; color: #666; }
+
+    .cert-item { margin-bottom: 0.8rem; }
+    .cert-item strong { font-size: 0.95rem; }
+    .cert-item span { display: block; font-size: 0.85rem; color: #666; }
 
     footer {
-      margin-top: 4rem;
-      font-size: 0.85rem;
-      color: #aaa;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #bbb;
+      padding: 2rem;
+      font-family: "Comic Sans MS", cursive;
     }
 
     @media (max-width: 500px) {
-      h1 { font-size: 2.5rem; }
       .skill-cols { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <h1>Maddy Silver</h1>
-  <p class="tagline">FP&A Analyst · Cape Town, South Africa</p>
-
-  <p class="bio">I ♥ finance, tech, and making things.</p>
-
-  <div class="links">
-    <a href="mailto:madzsilver@gmail.com">Email</a>
-    <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
-    <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
-  </div>
-
-  <hr />
-
-  <h2>Experience</h2>
-
-  <div class="exp">
-    <div class="exp-header">
-      <span class="exp-company">Reapit</span>
-      <span class="exp-date">2025 – Present</span>
-    </div>
-    <div class="exp-role">FP&A Analyst</div>
-    <ul>
-      <li>Financial planning and analysis at a large-scale PropTech software company</li>
-      <li>Forecasting, budgeting, and performance tracking</li>
-    </ul>
-  </div>
-
-  <div class="exp">
-    <div class="exp-header">
-      <span class="exp-company">Recess</span>
-      <span class="exp-date">2025</span>
-    </div>
-    <div class="exp-role">Finance Lead · US SaaS Startup</div>
-    <ul>
-      <li>End-to-end FP&A including forecasting, budgeting, and performance tracking</li>
-      <li>Partnered with the CEO on strategic decisions — runway, cost, growth</li>
-      <li>Built financial models covering revenue, unit economics, and scenario analysis</li>
-      <li>Led finance operations across payments, pricing, and cost structures</li>
-    </ul>
-  </div>
-
-  <div class="exp">
-    <div class="exp-header">
-      <span class="exp-company">Maholla</span>
-      <span class="exp-date">2022 – 2025</span>
-    </div>
-    <div class="exp-role">Lead Accountant · Part-Time · Dutch Tech Startup</div>
-    <ul>
-      <li>Set up and managed group financial accounts while completing CA(SA) articles</li>
-      <li>Led FP&A processes and performance tracking</li>
-      <li>Oversaw pre-seed and seed rounds, raising $2M in capital</li>
-    </ul>
-  </div>
-
-  <div class="exp">
-    <div class="exp-header">
-      <span class="exp-company">EY</span>
-      <span class="exp-date">2022 – 2025</span>
-    </div>
-    <div class="exp-role">Audit Supervisor · CA(SA) Articles</div>
-    <ul>
-      <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
-      <li>Led audit teams for one of South Africa's largest financial services companies</li>
-      <li>Ensured IFRS compliance; managed and mentored junior auditors</li>
-    </ul>
-  </div>
-
-  <hr />
-
-  <h2>Skills</h2>
-  <div class="skill-cols">
-    <div class="skill-group">
-      <h3>Finance</h3>
-      <ul>
-        <li>FP&A & Forecasting</li>
-        <li>Financial Modelling</li>
-        <li>SaaS & Unit Economics</li>
-        <li>Strategic Finance</li>
-        <li>Revenue & Margin Analysis</li>
-        <li>IFRS Reporting</li>
-        <li>Runway Management</li>
-      </ul>
-    </div>
-    <div class="skill-group">
-      <h3>Tech</h3>
-      <ul>
-        <li>SQL</li>
-        <li>Google Sheets / Excel</li>
-        <li>Metabase</li>
-        <li>AI Agent Building</li>
-        <li>Claude Code</li>
-        <li>Xero · Sage · Deel</li>
-      </ul>
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wordart-name">Maddy Silver</div>
+    <p class="hero-sub">FP&A Analyst &middot; Cape Town, South Africa</p>
+    <p class="hero-heart">I ♥ finance, tech, and making things.</p>
+    <div class="hero-links">
+      <a href="mailto:madzsilver@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a>
+      <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">YouTube</a>
     </div>
   </div>
 
-  <hr />
+  <hr class="divider" />
 
-  <h2>YouTube</h2>
-  <div class="yt-block">
-    <p>I run <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a> — started as CA(SA) study content, evolved into articles diaries, pivoting out of audit, and general finance + career advice. It's been a whole journey.</p>
-  </div>
+  <!-- ACCORDION SECTIONS -->
+  <div class="sections">
 
-  <hr />
+    <div class="section" id="s-experience">
+      <button class="section-toggle" onclick="toggle('s-experience')">
+        <span class="wa-experience">Experience</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="section-body">
+        <div class="exp">
+          <div class="exp-header">
+            <span class="exp-company">Reapit</span>
+            <span class="exp-date">2025 – Present</span>
+          </div>
+          <div class="exp-role">FP&A Analyst</div>
+          <ul>
+            <li>Financial planning and analysis at a large-scale PropTech software company</li>
+            <li>Forecasting, budgeting, and performance tracking</li>
+          </ul>
+        </div>
+        <div class="exp">
+          <div class="exp-header">
+            <span class="exp-company">Recess</span>
+            <span class="exp-date">2025</span>
+          </div>
+          <div class="exp-role">Finance Lead · US SaaS Startup</div>
+          <ul>
+            <li>End-to-end FP&A including forecasting, budgeting, and performance tracking</li>
+            <li>Partnered with the CEO on strategic decisions — runway, cost, growth</li>
+            <li>Built financial models covering revenue, unit economics, and scenario analysis</li>
+            <li>Led finance operations across payments, pricing, and cost structures</li>
+          </ul>
+        </div>
+        <div class="exp">
+          <div class="exp-header">
+            <span class="exp-company">Maholla</span>
+            <span class="exp-date">2022 – 2025</span>
+          </div>
+          <div class="exp-role">Lead Accountant · Part-Time</div>
+          <ul>
+            <li>Set up and managed group financial accounts while completing CA(SA) articles</li>
+            <li>Led FP&A processes and performance tracking</li>
+            <li>Oversaw pre-seed and seed rounds, raising $2M in capital</li>
+          </ul>
+        </div>
+        <div class="exp">
+          <div class="exp-header">
+            <span class="exp-company">EY</span>
+            <span class="exp-date">2022 – 2025</span>
+          </div>
+          <div class="exp-role">Audit Supervisor · CA(SA) Articles</div>
+          <ul>
+            <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
+            <li>Led audit teams for one of South Africa's largest financial services companies</li>
+            <li>Ensured IFRS compliance; managed and mentored junior auditors</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-  <h2>Education</h2>
+    <div class="section" id="s-skills">
+      <button class="section-toggle" onclick="toggle('s-skills')">
+        <span class="wa-skills">Skills</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="section-body">
+        <div class="skill-cols">
+          <div class="skill-group">
+            <h3>Finance</h3>
+            <ul>
+              <li>FP&A & Forecasting</li>
+              <li>Financial Modelling</li>
+              <li>SaaS & Unit Economics</li>
+              <li>Strategic Finance</li>
+              <li>Revenue & Margin Analysis</li>
+              <li>IFRS Reporting</li>
+              <li>Runway Management</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Tech</h3>
+            <ul>
+              <li>SQL</li>
+              <li>Google Sheets / Excel</li>
+              <li>Metabase</li>
+              <li>AI Agent Building</li>
+              <li>Claude Code</li>
+              <li>Xero · Sage · Deel</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="edu-item">
-    <strong>University of Cape Town</strong>
-    <span>Post-Graduate Diploma in Accounting · 2021 – 2022</span>
-  </div>
-  <div class="edu-item">
-    <strong>University of Cape Town</strong>
-    <span>BCom, Chartered Accounting · 2019 – 2021</span>
-  </div>
-  <div class="edu-item">
-    <strong>University of Cape Town</strong>
-    <span>Bachelor of Business Science, Actuarial Science · 2017 – 2019</span>
-  </div>
+    <div class="section" id="s-youtube">
+      <button class="section-toggle" onclick="toggle('s-youtube')">
+        <span class="wa-youtube">YouTube</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="section-body">
+        <div class="yt-block">
+          <p>I run <a href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a> — started as CA(SA) study content, evolved into articles diaries, pivoting out of audit, and general finance + career advice. It's been a whole journey.</p>
+        </div>
+      </div>
+    </div>
 
-  <hr />
+    <div class="section" id="s-education">
+      <button class="section-toggle" onclick="toggle('s-education')">
+        <span class="wa-education">Education</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="section-body">
+        <div class="edu-item">
+          <strong>University of Cape Town</strong>
+          <span>Post-Graduate Diploma in Accounting · 2021 – 2022</span>
+        </div>
+        <div class="edu-item">
+          <strong>University of Cape Town</strong>
+          <span>BCom, Chartered Accounting · 2019 – 2021</span>
+        </div>
+        <div class="edu-item">
+          <strong>University of Cape Town</strong>
+          <span>Bachelor of Business Science, Actuarial Science · 2017 – 2019</span>
+        </div>
+      </div>
+    </div>
 
-  <h2>Certifications</h2>
+    <div class="section" id="s-certs">
+      <button class="section-toggle" onclick="toggle('s-certs')">
+        <span class="wa-certs">Certifications</span>
+        <span class="arrow">▶</span>
+      </button>
+      <div class="section-body">
+        <div class="cert-item">
+          <strong>Financial Modeling & Valuation Analyst (FMVA®)</strong>
+          <span>Corporate Finance Institute · 2025</span>
+        </div>
+        <div class="cert-item">
+          <strong>Analyze Data with SQL</strong>
+          <span>Codecademy · 2025</span>
+        </div>
+        <div class="cert-item">
+          <strong>Assessment of Professional Competence (APC)</strong>
+          <span>SAICA · 2024</span>
+        </div>
+        <div class="cert-item">
+          <strong>Initial Test of Competence (ITC)</strong>
+          <span>SAICA · 2022</span>
+        </div>
+      </div>
+    </div>
 
-  <div class="edu-item">
-    <strong>Financial Modeling & Valuation Analyst (FMVA®)</strong>
-    <span>Corporate Finance Institute · 2025</span>
-  </div>
-  <div class="edu-item">
-    <strong>Analyze Data with SQL</strong>
-    <span>Codecademy · 2025</span>
-  </div>
-  <div class="edu-item">
-    <strong>Assessment of Professional Competence (APC)</strong>
-    <span>SAICA · 2024</span>
-  </div>
-  <div class="edu-item">
-    <strong>Initial Test of Competence (ITC)</strong>
-    <span>SAICA · 2022</span>
   </div>
 
   <footer>maddysilver.com</footer>
+
+  <script>
+    function toggle(id) {
+      const section = document.getElementById(id);
+      section.classList.toggle('open');
+    }
+  </script>
 
 </body>
 </html>
