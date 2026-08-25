@@ -10,7 +10,7 @@
 
     body {
       background: #fadadd;
-      font-family: 'MS Sans Serif', 'Arial', sans-serif;
+      font-family: 'MS Sans Serif', Arial, sans-serif;
       font-size: 11px;
       height: 100vh;
       display: flex;
@@ -19,11 +19,10 @@
       overflow: hidden;
     }
 
-    /* ── WINDOW ── */
     .window {
       background: #c0c0c0;
       border: 2px solid;
-      border-color: #ffffff #808080 #808080 #ffffff;
+      border-color: #fff #808080 #808080 #fff;
       box-shadow: 3px 3px 0 #000;
       width: min(98vw, 860px);
       height: min(96vh, 620px);
@@ -31,7 +30,6 @@
       flex-direction: column;
     }
 
-    /* ── TITLE BAR ── */
     .title-bar {
       background: linear-gradient(to right, #000080, #1084d0);
       padding: 3px 4px;
@@ -41,31 +39,17 @@
       flex-shrink: 0;
       user-select: none;
     }
-    .title-bar-text {
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .title-bar-text { color: #fff; font-weight: bold; font-size: 12px; }
     .title-bar-controls { display: flex; gap: 2px; }
     .tb-btn {
-      width: 16px;
-      height: 14px;
+      width: 16px; height: 14px;
       background: #c0c0c0;
-      border: 1px solid;
-      border-color: #ffffff #808080 #808080 #ffffff;
-      font-size: 9px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
+      border: 1px solid; border-color: #fff #808080 #808080 #fff;
+      font-size: 9px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
     }
-    .tb-btn:active { border-color: #808080 #ffffff #ffffff #808080; }
+    .tb-btn:active { border-color: #808080 #fff #fff #808080; }
 
-    /* ── MENU BAR ── */
     .menu-bar {
       background: #c0c0c0;
       display: flex;
@@ -77,32 +61,23 @@
       padding: 3px 10px;
       font-size: 11px;
       cursor: pointer;
-      position: relative;
     }
-    .menu-item:hover { background: #000080; color: white; }
+    .menu-item:hover, .menu-item.active { background: #000080; color: #fff; }
 
-    /* ── SEPARATOR ── */
     .sep {
       height: 4px;
       background: #c0c0c0;
       border-top: 1px solid #808080;
-      border-bottom: 1px solid #ffffff;
+      border-bottom: 1px solid #fff;
       flex-shrink: 0;
     }
 
-    /* ── MAIN AREA ── */
-    .main-area {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+    .main-area { display: flex; flex: 1; overflow: hidden; }
 
-    /* ── TOOLBAR ── */
     .toolbar {
       width: 54px;
       background: #c0c0c0;
-      border-right: 2px solid;
-      border-color: #808080;
+      border-right: 1px solid #808080;
       padding: 4px 3px;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -111,57 +86,122 @@
       flex-shrink: 0;
     }
     .tool {
-      width: 22px;
-      height: 22px;
+      width: 22px; height: 22px;
       background: #c0c0c0;
-      border: 1px solid;
-      border-color: #ffffff #808080 #808080 #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 11px;
-      user-select: none;
+      border: 1px solid; border-color: #fff #808080 #808080 #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 11px; user-select: none;
     }
     .tool:hover { background: #d4d4d4; }
-    .tool.active { border-color: #808080 #ffffff #ffffff #808080; background: #b0b0b0; }
+    .tool.active { border-color: #808080 #fff #fff #808080; background: #b0b0b0; }
 
-    /* ── CANVAS SCROLL ── */
     .canvas-scroll {
       flex: 1;
-      overflow: auto;
+      overflow: hidden;
       background: #808080;
       padding: 10px;
+      position: relative;
     }
+
+    /* The white canvas */
     .canvas {
       background: #fff;
-      min-height: 100%;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Home content layer */
+    #home-layer {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 30px 20px 40px;
       gap: 14px;
+      padding: 20px;
+      z-index: 1;
     }
 
-    /* ── WORDART SVG ── */
+    /* Section content layer */
+    #section-layer {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 24px 28px;
+      overflow-y: auto;
+      font-family: "Comic Sans MS", cursive;
+      font-size: 12px;
+      line-height: 1.7;
+      z-index: 1;
+    }
+
+    /* Eraser cover — white div that grows to erase old content */
+    #erase-cover {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 0;
+      background: #fff;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* Eraser block that rides the right edge of the cover */
+    #eraser-block {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 38px;
+      left: 0;
+      background: #e8e8e8;
+      border-left: 2px solid #bbb;
+      border-right: 2px solid #bbb;
+      z-index: 6;
+      display: none;
+      pointer-events: none;
+    }
+    #eraser-block::before {
+      content: '';
+      display: block;
+      height: 10px;
+      background: #ffb3ba;
+      border-bottom: 1px solid #ccc;
+    }
+
+    /* Stars SVG */
+    #stars-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Pixel dot cursor */
+    #dot {
+      position: absolute;
+      width: 4px; height: 4px;
+      background: #111;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0;
+    }
+
+    /* WordArt */
     .wordart-wrap {
-      width: min(480px, 90%);
+      width: min(460px, 90%);
       overflow: visible;
-      margin-top: 20px;
     }
 
-    /* ── CANVAS TEXT ── */
     .canvas-sub {
       font-family: "Comic Sans MS", cursive;
       font-size: 13px;
       color: #444;
       text-align: center;
-      line-height: 1.8;
     }
     .canvas-links {
-      display: flex;
-      gap: 20px;
+      display: flex; gap: 20px;
       font-family: "Comic Sans MS", cursive;
       font-size: 12px;
     }
@@ -169,150 +209,81 @@
     .canvas-links a:hover { color: #cc0066; }
     .canvas-hint {
       font-family: "Comic Sans MS", cursive;
-      font-size: 10px;
-      color: #aaa;
-      margin-top: 4px;
+      font-size: 10px; color: #aaa;
     }
 
-    /* ── COLOUR SECTION ── */
+    /* Section content styles */
+    .sec-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 6px;
+    }
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 14px;
+      font-size: 11px;
+      cursor: pointer;
+      color: #0000EE;
+      text-decoration: underline;
+    }
+    .back-btn:hover { color: #cc0066; }
+    .exp { margin-bottom: 14px; }
+    .exp-co { font-weight: bold; font-size: 13px; }
+    .exp-meta { font-size: 11px; color: #777; margin-bottom: 4px; }
+    .exp ul { padding-left: 16px; }
+    .exp li { margin-bottom: 2px; }
+    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .skill-group h3 { font-weight: bold; margin-bottom: 6px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+    .skill-group ul { padding-left: 14px; }
+    .skill-group li { line-height: 1.9; }
+    .edu-item { margin-bottom: 10px; }
+    .edu-item strong { display: block; }
+    .edu-item span { font-size: 11px; color: #777; }
+    .sec-link { color: #0000EE; text-decoration: underline; }
+
+    /* Colour section */
     .color-section {
       background: #c0c0c0;
-      border-top: 2px solid;
-      border-color: #ffffff #808080 #808080 #ffffff;
+      border-top: 2px solid; border-color: #fff #808080 #808080 #fff;
       padding: 4px 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       flex-shrink: 0;
     }
     .color-preview-box { width: 36px; height: 28px; position: relative; flex-shrink: 0; }
     .color-fg {
-      width: 22px; height: 20px;
-      background: #000;
+      width: 22px; height: 20px; background: #000;
       border: 1px solid; border-color: #808080 #fff #fff #808080;
       position: absolute; top: 0; left: 0;
     }
     .color-bg {
-      width: 22px; height: 20px;
-      background: #fff;
+      width: 22px; height: 20px; background: #fff;
       border: 1px solid; border-color: #808080 #fff #fff #808080;
       position: absolute; bottom: 0; right: 0;
     }
-    .palette {
-      display: grid;
-      grid-template-columns: repeat(28, 16px);
-      gap: 1px;
-    }
+    .palette { display: grid; grid-template-columns: repeat(28, 16px); gap: 1px; }
     .swatch {
       width: 16px; height: 13px;
       border: 1px solid; border-color: #808080 #fff #fff #808080;
       cursor: pointer;
-      flex-shrink: 0;
     }
     .swatch:hover { outline: 1px solid #000; }
 
-    /* ── STATUS BAR ── */
     .status-bar {
       background: #c0c0c0;
       border-top: 1px solid #808080;
       padding: 2px 6px;
       flex-shrink: 0;
-      display: flex;
-      gap: 4px;
     }
     .status-panel {
       border: 1px solid; border-color: #808080 #fff #fff #808080;
-      padding: 1px 6px;
-      font-size: 11px;
-      flex: 1;
+      padding: 1px 6px; font-size: 11px;
     }
-
-    /* ── OVERLAY ── */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-    .overlay.active { display: flex; }
-
-    /* ── DIALOG ── */
-    .dialog {
-      background: #c0c0c0;
-      border: 2px solid; border-color: #fff #808080 #808080 #fff;
-      box-shadow: 4px 4px 0 #000;
-      width: min(92vw, 500px);
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .dialog-title {
-      background: linear-gradient(to right, #000080, #1084d0);
-      padding: 3px 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: white;
-      font-weight: bold;
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-    .d-close {
-      width: 16px; height: 14px;
-      background: #c0c0c0;
-      border: 1px solid; border-color: #fff #808080 #808080 #fff;
-      font-size: 10px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .d-close:active { border-color: #808080 #fff #fff #808080; }
-    .dialog-body {
-      padding: 14px 16px;
-      overflow-y: auto;
-      font-family: "Comic Sans MS", cursive;
-      font-size: 12px;
-      line-height: 1.7;
-      flex: 1;
-    }
-    .dialog-footer {
-      padding: 8px 16px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      border-top: 1px solid #808080;
-      flex-shrink: 0;
-    }
-    .win-btn {
-      min-width: 70px;
-      padding: 3px 10px;
-      background: #c0c0c0;
-      border: 2px solid; border-color: #fff #808080 #808080 #fff;
-      font-family: "Comic Sans MS", cursive;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .win-btn:active { border-color: #808080 #fff #fff #808080; }
-
-    /* ── DIALOG CONTENT ── */
-    .exp { margin-bottom: 14px; }
-    .exp-co { font-weight: bold; font-size: 13px; }
-    .exp-meta { font-size: 11px; color: #666; margin-bottom: 4px; }
-    .exp ul { padding-left: 16px; }
-    .exp li { font-size: 12px; margin-bottom: 2px; }
-    .skill-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .skill-group h3 { font-weight: bold; margin-bottom: 6px; border-bottom: 1px solid #aaa; padding-bottom: 2px; }
-    .skill-group ul { padding-left: 14px; }
-    .skill-group li { font-size: 12px; line-height: 1.8; }
-    .edu-item { margin-bottom: 10px; }
-    .edu-item strong { display: block; font-size: 12px; }
-    .edu-item span { font-size: 11px; color: #666; }
-    .d-link { color: #0000EE; text-decoration: underline; }
   </style>
 </head>
 <body>
 
-<!-- ══ PAINT WINDOW ══ -->
 <div class="window">
 
   <div class="title-bar">
@@ -320,33 +291,32 @@
     <div class="title-bar-controls">
       <button class="tb-btn">_</button>
       <button class="tb-btn">□</button>
-      <button class="tb-btn" onclick="open('file')">✕</button>
+      <button class="tb-btn" onclick="navTo('file')">✕</button>
     </div>
   </div>
 
   <div class="menu-bar">
-    <div class="menu-item" onclick="open('file')">File</div>
-    <div class="menu-item" onclick="open('about')">About Maddy</div>
-    <div class="menu-item" onclick="open('experience')">Experience</div>
-    <div class="menu-item" onclick="open('skills')">Skills</div>
-    <div class="menu-item" onclick="open('youtube')">YouTube</div>
-    <div class="menu-item" onclick="open('education')">Education</div>
-    <div class="menu-item" onclick="open('contact')">Contact</div>
+    <div class="menu-item" onclick="navTo('file')">File</div>
+    <div class="menu-item" onclick="navTo('about')">About Maddy</div>
+    <div class="menu-item" onclick="navTo('experience')">Experience</div>
+    <div class="menu-item" onclick="navTo('skills')">Skills</div>
+    <div class="menu-item" onclick="navTo('youtube')">YouTube</div>
+    <div class="menu-item" onclick="navTo('education')">Education</div>
+    <div class="menu-item" onclick="navTo('contact')">Contact</div>
   </div>
 
   <div class="sep"></div>
 
   <div class="main-area">
 
-    <!-- Toolbar -->
     <div class="toolbar">
       <div class="tool" title="Free select">⬚</div>
       <div class="tool" title="Select">▭</div>
-      <div class="tool" title="Eraser">◻</div>
+      <div class="tool active" title="Eraser">◻</div>
       <div class="tool" title="Fill">🪣</div>
       <div class="tool" title="Eyedropper">💉</div>
       <div class="tool" title="Zoom">🔍</div>
-      <div class="tool active" title="Pencil">✏</div>
+      <div class="tool" title="Pencil">✏</div>
       <div class="tool" title="Brush">🖌</div>
       <div class="tool" title="Airbrush">💨</div>
       <div class="tool" title="Text" style="font-weight:bold;font-size:13px;">A</div>
@@ -358,19 +328,16 @@
       <div class="tool" title="Round rect">▢</div>
     </div>
 
-    <!-- Canvas -->
     <div class="canvas-scroll">
-      <div class="canvas" id="canvas" style="position:relative; overflow:hidden;">
+      <div class="canvas" id="canvas">
 
-        <!-- Stars layer (drawn by pencil) -->
-        <svg id="stars-svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="stars-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div id="dot"></div>
+        <div id="erase-cover"></div>
+        <div id="eraser-block"></div>
 
-        <!-- Pixel dot cursor (MS Paint pencil tool style) -->
-        <div id="pencil" style="position:absolute;width:4px;height:4px;background:#111;pointer-events:none;z-index:2;opacity:0;"></div>
-
-        <!-- Foreground content -->
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 20px 40px;">
-
+        <!-- HOME LAYER -->
+        <div id="home-layer">
           <svg class="wordart-wrap" viewBox="-10 -10 500 175" xmlns="http://www.w3.org/2000/svg" overflow="visible">
             <defs>
               <path id="arc" d="M 10,148 Q 240,30 470,148" />
@@ -386,21 +353,18 @@
                 <rect id="reveal-rect" x="-10" y="-80" width="0" height="300"/>
               </clipPath>
             </defs>
-            <!-- shadow (also revealed) -->
             <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
                   fill="rgba(0,0,0,0.18)" letter-spacing="1" clip-path="url(#reveal-clip)">
               <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
             </text>
-            <!-- main text -->
             <text font-family="Arial Black,Arial" font-size="60" font-weight="900"
                   fill="url(#grad)" letter-spacing="1" clip-path="url(#reveal-clip)"
-                  style="filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
+                  style="filter:drop-shadow(2px 3px 0 rgba(0,0,0,0.3));">
               <textPath href="#arc" startOffset="3%">Maddy Silver</textPath>
             </text>
-            <!-- Animate the clip rect to reveal text left→right -->
             <animate xlink:href="#reveal-rect" attributeName="width"
-                     from="0" to="520" dur="2s" begin="0.3s" fill="freeze" calcMode="spline"
-                     keyTimes="0;1" keySplines="0.4 0 0.2 1"/>
+                     from="0" to="520" dur="2s" begin="0.3s" fill="freeze"
+                     calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"/>
           </svg>
 
           <p class="canvas-sub">FP&amp;A Analyst &middot; Cape Town, South Africa</p>
@@ -413,15 +377,17 @@
           </div>
 
           <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
-
         </div>
+
+        <!-- SECTION LAYER (filled by JS) -->
+        <div id="section-layer"></div>
+
       </div>
     </div>
   </div>
 
   <div class="sep"></div>
 
-  <!-- Colour palette -->
   <div class="color-section">
     <div class="color-preview-box">
       <div class="color-fg" id="fg"></div>
@@ -430,317 +396,290 @@
     <div class="palette" id="palette"></div>
   </div>
 
-  <!-- Status bar -->
   <div class="status-bar">
     <div class="status-panel" id="status">For Help, click Help Topics on the Help menu.</div>
   </div>
 
 </div>
 
-<!-- ══ DIALOGS ══ -->
-
-<div class="overlay" id="d-about">
-  <div class="dialog">
-    <div class="dialog-title">
-      <span>ℹ️ About Maddy</span>
-      <button class="d-close" onclick="close('about')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <p>I'm Maddy — I ♥ finance, tech, and making things.</p><br/>
-      <p>Started my career in audit at EY, moved into startup finance, and now work in FP&amp;A at Reapit. Along the way: a YouTube channel, SQL, AI agents, web apps.</p><br/>
-      <p>Based in Cape Town, South Africa. CA(SA) eligible.</p>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('about')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-experience">
-  <div class="dialog">
-    <div class="dialog-title">
-      <span>💼 Experience</span>
-      <button class="d-close" onclick="close('experience')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <div class="exp">
-        <div class="exp-co">Reapit</div>
-        <div class="exp-meta">FP&amp;A Analyst · 2025 – Present</div>
-        <ul><li>FP&amp;A at a large-scale PropTech software company</li><li>Forecasting, budgeting, and performance tracking</li></ul>
-      </div>
-      <div class="exp">
-        <div class="exp-co">Recess</div>
-        <div class="exp-meta">Finance Lead · US SaaS Startup · 2025</div>
-        <ul>
-          <li>End-to-end FP&amp;A: forecasting, budgeting, performance tracking</li>
-          <li>Partnered with CEO on runway, cost, and growth decisions</li>
-          <li>Built financial models covering revenue, unit economics, scenarios</li>
-          <li>Led finance ops across payments, pricing, and cost structures</li>
-        </ul>
-      </div>
-      <div class="exp">
-        <div class="exp-co">Maholla</div>
-        <div class="exp-meta">Lead Accountant · Part-Time · 2022 – 2025</div>
-        <ul>
-          <li>Set up group financial accounts while completing CA(SA) articles</li>
-          <li>Led FP&amp;A processes and performance tracking</li>
-          <li>Oversaw pre-seed and seed rounds, raising $2M</li>
-        </ul>
-      </div>
-      <div class="exp">
-        <div class="exp-co">EY</div>
-        <div class="exp-meta">Audit Supervisor · CA(SA) Articles · 2022 – 2025</div>
-        <ul>
-          <li>Completed 3-year CA(SA) articles at EY Cape Town</li>
-          <li>Led audit teams for one of SA's largest financial services companies</li>
-          <li>Ensured IFRS compliance; managed and mentored junior auditors</li>
-        </ul>
-      </div>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('experience')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-skills">
-  <div class="dialog">
-    <div class="dialog-title">
-      <span>🛠 Skills</span>
-      <button class="d-close" onclick="close('skills')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <div class="skill-cols">
-        <div class="skill-group">
-          <h3>Finance</h3>
-          <ul>
-            <li>FP&amp;A &amp; Forecasting</li>
-            <li>Financial Modelling</li>
-            <li>SaaS &amp; Unit Economics</li>
-            <li>Strategic Finance</li>
-            <li>Revenue &amp; Margin Analysis</li>
-            <li>IFRS Reporting</li>
-            <li>Runway Management</li>
-          </ul>
-        </div>
-        <div class="skill-group">
-          <h3>Tech</h3>
-          <ul>
-            <li>SQL</li>
-            <li>Google Sheets / Excel</li>
-            <li>Metabase</li>
-            <li>AI Agent Building</li>
-            <li>Claude Code</li>
-            <li>Xero · Sage · Deel</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('skills')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-youtube">
-  <div class="dialog">
-    <div class="dialog-title">
-      <span>▶️ YouTube</span>
-      <button class="d-close" onclick="close('youtube')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <p>I run <strong>@accountingwithmaddy</strong> on YouTube.</p><br/>
-      <p>Started as CA(SA) study content, evolved into articles diaries, pivoting out of audit, and general finance + career advice. It's been a whole journey.</p><br/>
-      <p><a class="d-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">→ Watch on YouTube</a></p>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('youtube')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-education">
-  <div class="dialog">
-    <div class="dialog-title">
-      <span>🎓 Education &amp; Certifications</span>
-      <button class="d-close" onclick="close('education')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <p style="font-weight:bold;margin-bottom:8px;">Education</p>
-      <div class="edu-item"><strong>University of Cape Town</strong><span>Post-Graduate Diploma in Accounting · 2021–2022</span></div>
-      <div class="edu-item"><strong>University of Cape Town</strong><span>BCom, Chartered Accounting · 2019–2021</span></div>
-      <div class="edu-item"><strong>University of Cape Town</strong><span>BBusSci, Actuarial Science · 2017–2019</span></div>
-      <br/>
-      <p style="font-weight:bold;margin-bottom:8px;">Certifications</p>
-      <div class="edu-item"><strong>FMVA® — Corporate Finance Institute</strong><span>2025</span></div>
-      <div class="edu-item"><strong>Analyze Data with SQL — Codecademy</strong><span>2025</span></div>
-      <div class="edu-item"><strong>APC — SAICA</strong><span>2024</span></div>
-      <div class="edu-item"><strong>ITC — SAICA</strong><span>2022</span></div>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('education')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-contact">
-  <div class="dialog" style="max-width:340px;">
-    <div class="dialog-title">
-      <span>📧 Contact</span>
-      <button class="d-close" onclick="close('contact')">✕</button>
-    </div>
-    <div class="dialog-body">
-      <p><a class="d-link" href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a></p><br/>
-      <p><a class="d-link" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a></p><br/>
-      <p><a class="d-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a></p>
-    </div>
-    <div class="dialog-footer"><button class="win-btn" onclick="close('contact')">OK</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="d-file">
-  <div class="dialog" style="max-width:340px;">
-    <div class="dialog-title">
-      <span>⚠️ Microsoft Paint</span>
-      <button class="d-close" onclick="close('file')">✕</button>
-    </div>
-    <div class="dialog-body" style="display:flex;align-items:center;gap:16px;">
-      <span style="font-size:2.5rem;">⚠️</span>
-      <p>Do you want to save changes to<br/><strong>Maddy Silver's career</strong>?</p>
-    </div>
-    <div class="dialog-footer">
-      <button class="win-btn" onclick="close('file')">Yes</button>
-      <button class="win-btn" onclick="close('file')">No</button>
-      <button class="win-btn" onclick="close('file')">Cancel</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  // Colour palette
-  const swatches = [
-    '#000000','#808080','#800000','#808000','#008000','#008080','#000080','#800080',
-    '#c0c0c0','#ffffff','#ff0000','#ffff00','#00ff00','#00ffff','#0000ff','#ff00ff',
-    '#ff8040','#804000','#408040','#408080','#4080ff','#8040ff',
-    '#ff8080','#ffff80','#80ff80','#80ffff','#8080ff','#ff80ff'
-  ];
-  const palette = document.getElementById('palette');
-  swatches.forEach(c => {
-    const s = document.createElement('div');
-    s.className = 'swatch';
-    s.style.background = c;
-    s.onclick = () => document.getElementById('fg').style.background = c;
-    palette.appendChild(s);
-  });
-
-  // Dialog open/close (avoid shadowing window.open)
-  function open(id) {
-    document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
-    document.getElementById('d-' + id).classList.add('active');
-    document.getElementById('status').textContent = id.charAt(0).toUpperCase() + id.slice(1);
+// ── SECTION CONTENT ──────────────────────────────────────────
+const SECTIONS = {
+  about: {
+    label: 'About Maddy',
+    html: `<p>I'm Maddy — I ♥ finance, tech, and making things.</p><br/>
+           <p>Started my career in audit at EY, moved into startup finance, and now work in FP&A at Reapit.
+           Along the way: a YouTube channel, SQL, AI agents, web apps.</p><br/>
+           <p>Based in Cape Town, South Africa. CA(SA) eligible.</p>`
+  },
+  experience: {
+    label: 'Experience',
+    html: `<div class="exp"><div class="exp-co">Reapit</div><div class="exp-meta">FP&A Analyst · 2025 – Present</div>
+           <ul><li>FP&A at a large-scale PropTech software company</li><li>Forecasting, budgeting, and performance tracking</li></ul></div>
+           <div class="exp"><div class="exp-co">Recess</div><div class="exp-meta">Finance Lead · US SaaS Startup · 2025</div>
+           <ul><li>End-to-end FP&A: forecasting, budgeting, performance tracking</li>
+           <li>Partnered with CEO on runway, cost, and growth decisions</li>
+           <li>Built financial models covering revenue, unit economics, scenarios</li>
+           <li>Led finance ops across payments, pricing, and cost structures</li></ul></div>
+           <div class="exp"><div class="exp-co">Maholla</div><div class="exp-meta">Lead Accountant · Part-Time · 2022–2025</div>
+           <ul><li>Set up group financial accounts while completing CA(SA) articles</li>
+           <li>Led FP&A processes and performance tracking</li>
+           <li>Oversaw pre-seed and seed rounds, raising $2M</li></ul></div>
+           <div class="exp"><div class="exp-co">EY</div><div class="exp-meta">Audit Supervisor · CA(SA) Articles · 2022–2025</div>
+           <ul><li>Completed 3-year CA(SA) articles at EY Cape Town</li>
+           <li>Led audit teams for one of SA's largest financial services companies</li>
+           <li>Ensured IFRS compliance; managed and mentored junior auditors</li></ul></div>`
+  },
+  skills: {
+    label: 'Skills',
+    html: `<div class="skill-cols">
+           <div class="skill-group"><h3>Finance</h3><ul>
+           <li>FP&A &amp; Forecasting</li><li>Financial Modelling</li><li>SaaS &amp; Unit Economics</li>
+           <li>Strategic Finance</li><li>Revenue &amp; Margin Analysis</li><li>IFRS Reporting</li><li>Runway Management</li>
+           </ul></div>
+           <div class="skill-group"><h3>Tech</h3><ul>
+           <li>SQL</li><li>Google Sheets / Excel</li><li>Metabase</li>
+           <li>AI Agent Building</li><li>Claude Code</li><li>Xero · Sage · Deel</li>
+           </ul></div></div>`
+  },
+  youtube: {
+    label: 'YouTube',
+    html: `<p>I run <a class="sec-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a> on YouTube.</p><br/>
+           <p>Started as CA(SA) study content, evolved into articles diaries, pivoting out of audit,
+           and general finance + career advice. It's been a whole journey.</p><br/>
+           <p><a class="sec-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">→ Watch on YouTube</a></p>`
+  },
+  education: {
+    label: 'Education & Certifications',
+    html: `<p style="font-weight:bold;margin-bottom:10px;">Education</p>
+           <div class="edu-item"><strong>University of Cape Town</strong><span>Post-Graduate Diploma in Accounting · 2021–2022</span></div>
+           <div class="edu-item"><strong>University of Cape Town</strong><span>BCom, Chartered Accounting · 2019–2021</span></div>
+           <div class="edu-item"><strong>University of Cape Town</strong><span>BBusSci, Actuarial Science · 2017–2019</span></div>
+           <br/><p style="font-weight:bold;margin-bottom:10px;">Certifications</p>
+           <div class="edu-item"><strong>FMVA® — Corporate Finance Institute</strong><span>2025</span></div>
+           <div class="edu-item"><strong>Analyze Data with SQL — Codecademy</strong><span>2025</span></div>
+           <div class="edu-item"><strong>APC — SAICA</strong><span>2024</span></div>
+           <div class="edu-item"><strong>ITC — SAICA</strong><span>2022</span></div>`
+  },
+  contact: {
+    label: 'Contact',
+    html: `<p><a class="sec-link" href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a></p><br/>
+           <p><a class="sec-link" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a></p><br/>
+           <p><a class="sec-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a></p>`
+  },
+  file: {
+    label: 'File',
+    html: `<p>Do you want to save changes to <strong>Maddy Silver's career</strong>?</p><br/>
+           <p style="font-size:11px;color:#888;">(There are no unsaved changes. Everything is going great.)</p>`
   }
-  function close(id) {
-    document.getElementById('d-' + id).classList.remove('active');
-    document.getElementById('status').textContent = 'For Help, click Help Topics on the Help menu.';
+};
+
+// ── ERASER NAVIGATION ─────────────────────────────────────────
+const canvas      = document.getElementById('canvas');
+const homeLayer   = document.getElementById('home-layer');
+const sectionLayer= document.getElementById('section-layer');
+const eraseCover  = document.getElementById('erase-cover');
+const eraserBlock = document.getElementById('eraser-block');
+const statusEl    = document.getElementById('status');
+
+let currentView = 'home';
+let erasing = false;
+
+function navTo(id) {
+  if (erasing || id === currentView) return;
+  erasing = true;
+
+  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+  statusEl.textContent = id === 'home' ? 'For Help, click Help Topics on the Help menu.' : (SECTIONS[id]?.label || '');
+
+  eraseAndSwitch(id, () => { erasing = false; });
+}
+
+function eraseAndSwitch(target, done) {
+  const cw = canvas.offsetWidth;
+
+  // Phase 1: eraser sweeps L→R, covering old content
+  eraseCover.style.width = '0';
+  eraseCover.style.transition = 'none';
+  eraserBlock.style.display = 'block';
+  eraserBlock.style.left = '-38px';
+
+  let x = -38;
+  const speed1 = (cw + 76) / 55; // cover in ~55 frames
+
+  function sweep1() {
+    x += speed1;
+    eraseCover.style.width = Math.max(0, x) + 'px';
+    eraserBlock.style.left = x + 'px';
+
+    if (x < cw + 38) {
+      requestAnimationFrame(sweep1);
+    } else {
+      // Content is fully covered — swap layers
+      swapContent(target);
+
+      // Phase 2: eraser sweeps R→L, revealing new content
+      setTimeout(() => {
+        let x2 = cw + 38;
+        const speed2 = (cw + 76) / 55;
+
+        function sweep2() {
+          x2 -= speed2;
+          eraseCover.style.width = Math.max(0, x2 - 38) + 'px';
+          eraserBlock.style.left = (x2 - 38) + 'px';
+
+          if (x2 > -38) {
+            requestAnimationFrame(sweep2);
+          } else {
+            eraserBlock.style.display = 'none';
+            eraseCover.style.width = '0';
+            done();
+          }
+        }
+        requestAnimationFrame(sweep2);
+      }, 80);
+    }
   }
+  requestAnimationFrame(sweep1);
+}
 
-  // Click overlay background to close
-  document.querySelectorAll('.overlay').forEach(o => {
-    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
+function swapContent(target) {
+  if (target === 'home') {
+    sectionLayer.style.display = 'none';
+    homeLayer.style.display = 'flex';
+    currentView = 'home';
+  } else {
+    homeLayer.style.display = 'none';
+    const sec = SECTIONS[target];
+    sectionLayer.innerHTML = `
+      <span class="back-btn" onclick="navTo('home')">← Back</span>
+      <div class="sec-title">${sec.label}</div>
+      ${sec.html}`;
+    sectionLayer.style.display = 'block';
+    currentView = target;
+  }
+}
+
+// ── COLOUR PALETTE ────────────────────────────────────────────
+const swatches = [
+  '#000','#808080','#800000','#808000','#008000','#008080','#000080','#800080',
+  '#c0c0c0','#fff','#f00','#ff0','#0f0','#0ff','#00f','#f0f',
+  '#ff8040','#804000','#408040','#408080','#4080ff','#8040ff',
+  '#ff8080','#ffff80','#80ff80','#80ffff','#8080ff','#ff80ff'
+];
+const palette = document.getElementById('palette');
+swatches.forEach(c => {
+  const s = document.createElement('div');
+  s.className = 'swatch';
+  s.style.background = c;
+  s.onclick = () => document.getElementById('fg').style.background = c;
+  palette.appendChild(s);
+});
+
+// Tool clicks
+document.querySelectorAll('.tool').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
   });
+});
 
-  // Tool clicks
-  document.querySelectorAll('.tool').forEach(t => {
-    t.addEventListener('click', function() {
-      document.querySelectorAll('.tool').forEach(x => x.classList.remove('active'));
-      this.classList.add('active');
+// ── STARS ─────────────────────────────────────────────────────
+const starsSvg = document.getElementById('stars-svg');
+const dot      = document.getElementById('dot');
+
+// 5-pointed pentagram in one stroke, with hand-drawn jitter and wobbly bezier segments
+function pentagram(cx, cy, r, jitter) {
+  // Visit vertices: top → lower-right → upper-left → upper-right → lower-left → top
+  const order = [270, 54, 198, 342, 126, 270].map(d => d * Math.PI / 180);
+  const pts = order.map(a => [
+    cx + r * Math.cos(a) + (Math.random() - 0.5) * jitter * 2,
+    cy + r * Math.sin(a) + (Math.random() - 0.5) * jitter * 2
+  ]);
+  // Use quadratic bezier segments with a wobble control point for scribbly look
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)} `;
+  for (let i = 1; i < pts.length; i++) {
+    const mx = (pts[i-1][0] + pts[i][0]) / 2 + (Math.random() - 0.5) * jitter * 3;
+    const my = (pts[i-1][1] + pts[i][1]) / 2 + (Math.random() - 0.5) * jitter * 3;
+    d += `Q${mx.toFixed(1)},${my.toFixed(1)} ${pts[i][0].toFixed(1)},${pts[i][1].toFixed(1)} `;
+  }
+  return d;
+}
+
+const starDefs = [
+  { px: 9,  py: 16, r: 32, colors: ['#2196f3','#e91e63'] },
+  { px: 83, py: 10, r: 22, colors: ['#ff9800','#e91e63'] },
+  { px: 89, py: 67, r: 26, colors: ['#f44336','#00bcd4'] },
+  { px: 13, py: 79, r: 36, colors: ['#9c27b0','#ffeb3b'] },
+  { px: 70, py: 85, r: 20, colors: ['#795548'] },
+  { px: 57, py: 16, r: 24, colors: ['#4caf50','#f44336'] },
+  { px: 4,  py: 50, r: 22, colors: ['#2196f3'] },
+  { px: 93, py: 38, r: 18, colors: ['#ffeb3b','#333'] },
+  { px: 43, py: 89, r: 24, colors: ['#9c27b0','#ffeb3b'] },
+  { px: 33, py: 7,  r: 18, colors: ['#9c27b0','#2196f3'] },
+];
+
+function animateStroke(d, color, sw, fo, onDone) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', d);
+  path.setAttribute('fill', color);
+  path.setAttribute('fill-opacity', fo);
+  path.setAttribute('stroke', color);
+  path.setAttribute('stroke-width', sw);
+  path.setAttribute('stroke-linecap', 'round');
+  path.setAttribute('stroke-linejoin', 'round');
+  starsSvg.appendChild(path);
+
+  const total = path.getTotalLength();
+  path.style.strokeDasharray  = total;
+  path.style.strokeDashoffset = total;
+
+  let drawn = 0;
+  // Slow, languid speed with slight randomness each frame
+  const baseSpeed = total / 90;
+
+  function frame() {
+    drawn = Math.min(drawn + baseSpeed * (0.7 + Math.random() * 0.6), total);
+    path.style.strokeDashoffset = total - drawn;
+
+    const pt = path.getPointAtLength(drawn);
+    dot.style.left = (pt.x - 2) + 'px';
+    dot.style.top  = (pt.y - 2) + 'px';
+
+    if (drawn < total) { requestAnimationFrame(frame); }
+    else { onDone && setTimeout(onDone, 200); }
+  }
+  requestAnimationFrame(frame);
+}
+
+function drawAllStars() {
+  dot.style.opacity = '1';
+  const cw = canvas.offsetWidth;
+  const ch = canvas.offsetHeight;
+
+  const queue = [];
+  starDefs.forEach(s => {
+    const cx = (s.px / 100) * cw;
+    const cy = (s.py / 100) * ch;
+    s.colors.forEach((color, ci) => {
+      const rr  = ci === 0 ? s.r : s.r * 0.92;
+      const jit = ci === 0 ? 5 : 4;
+      const d   = pentagram(cx + ci*2, cy + ci, rr, jit);
+      queue.push({ d, color, sw: ci===0 ? 2.2 : 1.8, fo: ci===0 ? 0.2 : 0.12 });
     });
   });
 
-  // ── PIXEL DOT DRAWS PENTAGRAM STARS ──
-  const starsSvg = document.getElementById('stars-svg');
-  const pencil   = document.getElementById('pencil');
-  const canvas   = document.getElementById('canvas');
-
-  // 5-pointed pentagram in one continuous stroke (no pen lift)
-  // Visits vertices in order: top → lower-right → upper-left → upper-right → lower-left → top
-  function pentagram(cx, cy, r, jitter) {
-    const order = [270, 54, 198, 342, 126, 270].map(d => d * Math.PI / 180);
-    const pts   = order.map(a => [
-      cx + r * Math.cos(a) + (Math.random() - 0.5) * jitter,
-      cy + r * Math.sin(a) + (Math.random() - 0.5) * jitter
-    ]);
-    return 'M' + pts[0].join(',') + ' ' + pts.slice(1).map(p => 'L' + p.join(',')).join(' ');
+  let i = 0;
+  function next() {
+    if (i >= queue.length) { dot.style.opacity = '0'; return; }
+    const q = queue[i++];
+    animateStroke(q.d, q.color, q.sw, q.fo, next);
   }
+  next();
+}
 
-  // Stars: px/py = % of canvas, r = radius px, colors = array (one stroke per color)
-  const starDefs = [
-    { px: 10, py: 16, r: 30, colors: ['#2196f3', '#e91e63'] },
-    { px: 82, py: 10, r: 22, colors: ['#ff9800', '#e91e63'] },
-    { px: 88, py: 66, r: 26, colors: ['#f44336', '#00bcd4'] },
-    { px: 14, py: 78, r: 34, colors: ['#9c27b0', '#ffeb3b'] },
-    { px: 70, py: 84, r: 19, colors: ['#795548'] },
-    { px: 57, py: 17, r: 24, colors: ['#4caf50', '#f44336'] },
-    { px: 5,  py: 50, r: 22, colors: ['#2196f3'] },
-    { px: 93, py: 38, r: 18, colors: ['#ffeb3b', '#333'] },
-    { px: 43, py: 88, r: 23, colors: ['#9c27b0', '#ffeb3b'] },
-    { px: 34, py: 8,  r: 18, colors: ['#9c27b0', '#2196f3'] },
-  ];
-
-  function animateOnePath(d, color, sw, fillOpacity, onDone) {
-    const ns   = 'http://www.w3.org/2000/svg';
-    const path = document.createElementNS(ns, 'path');
-    path.setAttribute('d', d);
-    path.setAttribute('fill', color);
-    path.setAttribute('fill-opacity', fillOpacity);
-    path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', sw);
-    path.setAttribute('stroke-linecap', 'round');
-    path.setAttribute('stroke-linejoin', 'round');
-    starsSvg.appendChild(path);
-
-    const total = path.getTotalLength();
-    path.style.strokeDasharray  = total;
-    path.style.strokeDashoffset = total;
-
-    let drawn = 0;
-    const speed = total / 40;
-
-    function frame() {
-      drawn = Math.min(drawn + speed, total);
-      path.style.strokeDashoffset = total - drawn;
-
-      const pt = path.getPointAtLength(drawn);
-      pencil.style.left = (pt.x - 2) + 'px';
-      pencil.style.top  = (pt.y - 2) + 'px';
-
-      if (drawn < total) { requestAnimationFrame(frame); }
-      else { onDone && setTimeout(onDone, 80); }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  function drawAllStars() {
-    pencil.style.opacity = '1';
-    const cw = canvas.offsetWidth;
-    const ch = canvas.offsetHeight;
-
-    // Flatten all strokes into a queue
-    const queue = [];
-    starDefs.forEach(s => {
-      const cx = (s.px / 100) * cw;
-      const cy = (s.py / 100) * ch;
-      s.colors.forEach((color, ci) => {
-        // Slight offset/scale variation for 2nd color stroke
-        const rr = ci === 0 ? s.r : s.r * 0.95;
-        const jit = ci === 0 ? 4 : 3;
-        const d = pentagram(cx + ci * 2, cy + ci * 1, rr, jit);
-        const sw = ci === 0 ? 2 : 1.8;
-        const fo = ci === 0 ? 0.18 : 0.12;
-        queue.push({ d, color, sw, fo });
-      });
-    });
-
-    let i = 0;
-    function next() {
-      if (i >= queue.length) { pencil.style.opacity = '0'; return; }
-      const q = queue[i++];
-      animateOnePath(q.d, q.color, q.sw, q.fo, next);
-    }
-    next();
-  }
-
-  setTimeout(drawAllStars, 2500);
+setTimeout(drawAllStars, 2500);
 </script>
 
 </body>
