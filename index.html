@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>untitled - Paint</title>
+  <title>Maddy Silver - Paint</title>
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -316,7 +316,7 @@
 <div class="window">
 
   <div class="title-bar">
-    <div class="title-bar-text">🎨 untitled - Paint</div>
+    <div class="title-bar-text">🎨 Maddy Silver - Paint</div>
     <div class="title-bar-controls">
       <button class="tb-btn">_</button>
       <button class="tb-btn">□</button>
@@ -365,8 +365,21 @@
         <!-- Stars layer (drawn by pencil) -->
         <svg id="stars-svg" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;" xmlns="http://www.w3.org/2000/svg"></svg>
 
-        <!-- Pencil cursor -->
-        <div id="pencil" style="position:absolute;font-size:18px;pointer-events:none;z-index:2;opacity:0;transition:left 0.45s ease,top 0.45s ease;">✏️</div>
+        <!-- MS Paint pencil cursor (tip at bottom-left of SVG = point 1,19) -->
+        <div id="pencil" style="position:absolute;pointer-events:none;z-index:2;opacity:0;width:22px;height:22px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+            <!-- body yellow -->
+            <polygon points="4,18 7,15 19,3 16,6" fill="#f5c842" stroke="#111" stroke-width="0.6"/>
+            <!-- eraser pink -->
+            <polygon points="16,6 19,3 21,1 18,4" fill="#ffaaaa" stroke="#777" stroke-width="0.5"/>
+            <!-- wood tip -->
+            <polygon points="4,18 2,16 7,15" fill="#c8914a" stroke="#111" stroke-width="0.5"/>
+            <!-- graphite tip -->
+            <polygon points="0,22 2,20 2,16 4,18" fill="#555" stroke="#333" stroke-width="0.4"/>
+            <!-- lead point -->
+            <polygon points="0,22 1,21 2,20" fill="#111"/>
+          </svg>
+        </div>
 
         <!-- Foreground content -->
         <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 20px 40px;">
@@ -648,72 +661,88 @@
   });
 
   // ── PENCIL DRAWS SPARKLE STARS ──
-  // 4-pointed sparkle star path centred at origin, size r
-  function starPath(r) {
-    const i = r * 0.18;
-    return `M0,${-r} L${i},${-i} L${r},0 L${i},${i} L0,${r} L${-i},${i} L${-r},0 L${-i},${-i}Z`;
+  const starsSvg = document.getElementById('stars-svg');
+  const pencil   = document.getElementById('pencil');
+  const canvas   = document.getElementById('canvas');
+
+  // 4-pointed sparkle path at absolute canvas coords
+  function starPathAt(cx, cy, r) {
+    const i = r * 0.2;
+    return `M${cx},${cy-r} L${cx+i},${cy-i} L${cx+r},${cy} L${cx+i},${cy+i} `
+         + `L${cx},${cy+r} L${cx-i},${cy+i} L${cx-r},${cy} L${cx-i},${cy-i}Z`;
   }
 
   const starDefs = [
-    { px: 12, py: 18, r: 14, color: '#ff69b4' },
-    { px: 80, py: 12, r: 11, color: '#9b59b6' },
-    { px: 88, py: 68, r: 13, color: '#3498db' },
-    { px: 18, py: 75, r: 16, color: '#e67e22' },
-    { px: 72, py: 82, r: 10, color: '#2ecc71' },
-    { px: 60, py: 20, r: 12, color: '#e74c3c' },
-    { px: 6,  py: 50, r: 11, color: '#f39c12' },
-    { px: 93, py: 40, r: 10, color: '#1abc9c' },
-    { px: 45, py: 88, r: 13, color: '#cc00cc' },
-    { px: 35, py: 10, r: 9,  color: '#0044ff' },
+    { px: 10, py: 15, r: 18, color: '#ff69b4' },
+    { px: 82, py: 10, r: 14, color: '#9b59b6' },
+    { px: 90, py: 65, r: 16, color: '#3498db' },
+    { px: 15, py: 78, r: 20, color: '#e67e22' },
+    { px: 70, py: 83, r: 13, color: '#2ecc71' },
+    { px: 58, py: 18, r: 15, color: '#e74c3c' },
+    { px: 5,  py: 48, r: 14, color: '#f39c12' },
+    { px: 93, py: 38, r: 12, color: '#1abc9c' },
+    { px: 42, py: 87, r: 16, color: '#cc00cc' },
+    { px: 33, py: 8,  r: 11, color: '#0044ff' },
   ];
 
-  const svg   = document.getElementById('stars-svg');
-  const pencil = document.getElementById('pencil');
-  const canvas = document.getElementById('canvas');
+  // Animate one star: pencil tip follows stroke in real-time
+  function animateStar(cx, cy, r, color, onDone) {
+    const ns   = 'http://www.w3.org/2000/svg';
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', starPathAt(cx, cy, r));
+    path.setAttribute('fill', color);
+    path.setAttribute('fill-opacity', '0.22');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '2.2');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    starsSvg.appendChild(path);
 
-  function drawStars() {
-    pencil.style.opacity = '1';
-    let t = 2600; // start after WordArt reveal
+    const total = path.getTotalLength();
+    path.style.strokeDasharray  = total;
+    path.style.strokeDashoffset = total;
 
-    starDefs.forEach((s, i) => {
-      setTimeout(() => {
-        // Move pencil to star position
-        const cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-        const px = (s.px / 100) * cw;
-        const py = (s.py / 100) * ch;
-        pencil.style.left = px + 'px';
-        pencil.style.top  = py + 'px';
+    let drawn = 0;
+    const speed = total / 38; // ~38 frames per star
 
-        // After pencil arrives, draw the star
-        setTimeout(() => {
-          const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-          g.setAttribute('transform', `translate(${px}, ${py})`);
+    function frame() {
+      drawn = Math.min(drawn + speed, total);
+      path.style.strokeDashoffset = total - drawn;
 
-          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.setAttribute('d', starPath(s.r));
-          path.setAttribute('fill', s.color);
-          path.setAttribute('fill-opacity', '0.25');
-          path.setAttribute('stroke', s.color);
-          path.setAttribute('stroke-width', '1.8');
-          path.setAttribute('pathLength', '100');
-          path.style.strokeDasharray = '100';
-          path.style.strokeDashoffset = '100';
-          path.style.transition = 'stroke-dashoffset 0.35s ease';
-          g.appendChild(path);
-          svg.appendChild(g);
+      // Move pencil tip (tip = bottom-left of SVG = point 0,22) to current stroke end
+      const pt = path.getPointAtLength(drawn);
+      pencil.style.left = (pt.x) + 'px';        // tip x offset within SVG is ~0
+      pencil.style.top  = (pt.y - 22) + 'px';   // shift up by pencil height so tip aligns
 
-          // Trigger draw
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            path.style.strokeDashoffset = '0';
-          }));
-        }, 460);
-
-      }, t + i * 750);
-    });
+      if (drawn < total) {
+        requestAnimationFrame(frame);
+      } else {
+        onDone && setTimeout(onDone, 120);
+      }
+    }
+    requestAnimationFrame(frame);
   }
 
-  // Kick off after page settles
-  setTimeout(drawStars, 400);
+  function drawAllStars() {
+    pencil.style.opacity    = '1';
+    pencil.style.transition = 'none';
+
+    const cw = canvas.offsetWidth;
+    const ch = canvas.offsetHeight;
+
+    let idx = 0;
+    function next() {
+      if (idx >= starDefs.length) return;
+      const s  = starDefs[idx++];
+      const cx = (s.px / 100) * cw;
+      const cy = (s.py / 100) * ch;
+      animateStar(cx, cy, s.r, s.color, next);
+    }
+    next();
+  }
+
+  // Start after WordArt reveal (~2.3s)
+  setTimeout(drawAllStars, 2500);
 </script>
 
 </body>
