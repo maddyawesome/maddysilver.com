@@ -294,22 +294,126 @@
   <div class="main-area">
 
     <div class="toolbar">
-      <div class="tool" title="Hand" style="font-size:14px;">🖐</div>
-      <div class="tool" title="Select">▭</div>
-      <div class="tool" title="Eraser">◻</div>
-      <div class="tool" title="Fill">🪣</div>
-      <div class="tool" title="Eyedropper">💉</div>
-      <div class="tool" title="Zoom">🔍</div>
-      <div class="tool active" title="Pencil">✏</div>
-      <div class="tool" title="Brush">🖌</div>
-      <div class="tool" title="Airbrush">💨</div>
-      <div class="tool" title="Text" style="font-weight:bold;font-size:13px;">A</div>
-      <div class="tool" title="Line">╱</div>
-      <div class="tool" title="Curve">〜</div>
-      <div class="tool" title="Rectangle">□</div>
-      <div class="tool" title="Polygon">⬠</div>
-      <div class="tool" title="Ellipse">○</div>
-      <div class="tool" title="Round rect">▢</div>
+      <!-- Hand -->
+      <div class="tool" title="Hand">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="1" width="2" height="8" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <rect x="7" y="2" width="2" height="7" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <rect x="9" y="3" width="2" height="6" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <rect x="11" y="4" width="2" height="5" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <rect x="3" y="6" width="2" height="3" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <rect x="3" y="9" width="10" height="5" rx="1" fill="#fff" stroke="#000" stroke-width="0.75"/>
+        </svg>
+      </div>
+      <!-- Select -->
+      <div class="tool" title="Select">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="12" height="10" fill="none" stroke="#000" stroke-width="1" stroke-dasharray="2,1"/>
+          <rect x="1" y="1" width="2" height="2" fill="#000"/><rect x="7" y="1" width="2" height="2" fill="#000"/><rect x="13" y="1" width="2" height="2" fill="#000"/>
+          <rect x="1" y="6" width="2" height="2" fill="#000"/><rect x="13" y="6" width="2" height="2" fill="#000"/>
+          <rect x="1" y="11" width="2" height="2" fill="#000"/><rect x="7" y="11" width="2" height="2" fill="#000"/><rect x="13" y="11" width="2" height="2" fill="#000"/>
+        </svg>
+      </div>
+      <!-- Eraser -->
+      <div class="tool" title="Eraser">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="1,11 4,5 14,5 14,13 1,13" fill="#ff9999" stroke="#000" stroke-width="0.75"/>
+          <line x1="1" y1="11" x2="14" y2="11" stroke="#000" stroke-width="1"/>
+          <line x1="4" y1="5" x2="4" y2="13" stroke="#808080" stroke-width="1"/>
+        </svg>
+      </div>
+      <!-- Fill -->
+      <div class="tool" title="Fill">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 7 L2 13 L10 13 L10 7 L8 5 L4 5 Z" fill="#fff" stroke="#000" stroke-width="0.75"/>
+          <line x1="4" y1="5" x2="3" y2="3" stroke="#000" stroke-width="1"/>
+          <line x1="8" y1="5" x2="9" y2="3" stroke="#000" stroke-width="1"/>
+          <path d="M3 3 Q6 1.5 9 3" fill="none" stroke="#000" stroke-width="1"/>
+          <line x1="10" y1="7" x2="14" y2="3" stroke="#000" stroke-width="1.5" stroke-linecap="square"/>
+          <ellipse cx="14" cy="6" rx="1.5" ry="2" fill="#0000cc"/>
+        </svg>
+      </div>
+      <!-- Eyedropper -->
+      <div class="tool" title="Eyedropper">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <line x1="9" y1="2" x2="3" y2="11" stroke="#000" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="8" y="0" width="5" height="3" rx="1" fill="#fff" stroke="#000" stroke-width="0.75" transform="rotate(45 10 2)"/>
+          <polygon points="2,11 4,10 5,13 3,14" fill="#000"/>
+          <circle cx="3" cy="15" r="1.2" fill="#ff0000"/>
+        </svg>
+      </div>
+      <!-- Zoom -->
+      <div class="tool" title="Zoom">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="6" cy="6" r="4.5" fill="#fff" stroke="#000" stroke-width="1.2"/>
+          <line x1="9" y1="9" x2="14" y2="14" stroke="#000" stroke-width="2.2" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <!-- Pencil -->
+      <div class="tool active" title="Pencil">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="3,13 2,14 4,16 13,4 11,1 2,12" fill="#ffff80" stroke="#000" stroke-width="0.75"/>
+          <polygon points="11,1 13,3 15,1 13,0" fill="#ff9999" stroke="#000" stroke-width="0.75"/>
+          <polygon points="2,12 4,14 3,16 1,14" fill="#c8c8c8" stroke="#000" stroke-width="0.5"/>
+        </svg>
+      </div>
+      <!-- Brush -->
+      <div class="tool" title="Brush">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="11,1 13,0 15,2 14,4 5,11 3,9" fill="#c08040" stroke="#000" stroke-width="0.75"/>
+          <line x1="5" y1="11" x2="3" y2="9" stroke="#000" stroke-width="1"/>
+          <ellipse cx="3" cy="12" rx="2.5" ry="3" fill="#606060" stroke="#000" stroke-width="0.75"/>
+        </svg>
+      </div>
+      <!-- Airbrush -->
+      <div class="tool" title="Airbrush">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="6" cy="9" r="5" fill="none" stroke="#000" stroke-width="1"/>
+          <rect x="3" y="5" width="1" height="1" fill="#000"/><rect x="7" y="4" width="1" height="1" fill="#000"/>
+          <rect x="4" y="11" width="1" height="1" fill="#000"/><rect x="8" y="12" width="1" height="1" fill="#000"/>
+          <rect x="10" y="9" width="1" height="1" fill="#000"/><rect x="2" y="9" width="1" height="1" fill="#000"/>
+          <line x1="11" y1="7" x2="15" y2="5" stroke="#000" stroke-width="1.5"/>
+          <rect x="13" y="3" width="3" height="3" rx="0.5" fill="#fff" stroke="#000" stroke-width="0.75"/>
+        </svg>
+      </div>
+      <!-- Text -->
+      <div class="tool" title="Text" style="font-weight:bold;font-size:14px;font-family:serif;">A</div>
+      <!-- Line -->
+      <div class="tool" title="Line">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <line x1="2" y1="2" x2="14" y2="14" stroke="#000" stroke-width="1.5" stroke-linecap="square"/>
+        </svg>
+      </div>
+      <!-- Curve -->
+      <div class="tool" title="Curve">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 14 Q4 4 8 8 Q12 12 14 2" fill="none" stroke="#000" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Rectangle -->
+      <div class="tool" title="Rectangle">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="3" width="12" height="9" fill="none" stroke="#000" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Polygon -->
+      <div class="tool" title="Polygon">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="8,1 14,6 12,14 4,14 2,6" fill="none" stroke="#000" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Ellipse -->
+      <div class="tool" title="Ellipse">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="8" cy="8" rx="6" ry="5" fill="none" stroke="#000" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <!-- Round rect -->
+      <div class="tool" title="Round rect">
+        <svg viewBox="0 0 16 16" width="13" height="13" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="3" width="12" height="9" rx="3" fill="none" stroke="#000" stroke-width="1.5"/>
+        </svg>
+      </div>
     </div>
 
     <div class="canvas-scroll">
