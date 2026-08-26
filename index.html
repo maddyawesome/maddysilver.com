@@ -294,7 +294,7 @@
   <div class="main-area">
 
     <div class="toolbar">
-      <div class="tool" title="Hand">☞</div>
+      <div class="tool" title="Hand" style="font-size:14px;">🖐</div>
       <div class="tool" title="Select">▭</div>
       <div class="tool" title="Eraser">◻</div>
       <div class="tool" title="Fill">🪣</div>
@@ -579,7 +579,7 @@ swatches.forEach(c => {
 // ── GLOBAL DRAW CANVAS ────────────────────────────────────────
 const globalDraw = document.getElementById('global-draw');
 let gdCtx = null;
-let gdDrawing = false, gdLx = 0, gdLy = 0;
+let gdDrawing = false, gdLx = 0, gdLy = 0, gdStartX = 0, gdStartY = 0, gdDidDraw = false;
 let gdSnapshot = null; let currentTool = 'pencil';
 
 function initGlobalDraw() {
@@ -603,7 +603,7 @@ function initGlobalDraw() {
   }
 
   function gdStart(x, y) {
-    gdDrawing = true; gdLx = x; gdLy = y;
+    gdDrawing = true; gdLx = x; gdLy = y; gdStartX = x; gdStartY = y; gdDidDraw = false;
     switch (currentTool) {
       case 'pencil':
         gdCtx.beginPath(); gdCtx.arc(x, y, getSize()/2, 0, Math.PI*2);
@@ -638,6 +638,7 @@ function initGlobalDraw() {
 
   function gdMove(x, y) {
     if (!gdDrawing) return;
+    if (Math.hypot(x - gdStartX, y - gdStartY) > 4) gdDidDraw = true;
     const sz = getSize(), col = getColor();
     switch (currentTool) {
       case 'pencil':
@@ -672,7 +673,22 @@ function initGlobalDraw() {
 
   globalDraw.addEventListener('mousedown',  e => gdStart(e.offsetX, e.offsetY));
   globalDraw.addEventListener('mousemove',  e => gdMove(e.offsetX, e.offsetY));
-  globalDraw.addEventListener('mouseup',    () => { gdDrawing = false; gdSnapshot = null; });
+  function gdEnd(clientX, clientY) {
+    gdDrawing = false; gdSnapshot = null;
+    if (!gdDidDraw && clientX !== undefined) {
+      // Pure tap — forward to element underneath
+      globalDraw.style.pointerEvents = 'none';
+      const el = document.elementFromPoint(clientX, clientY);
+      if (el) el.click();
+      setTimeout(() => {
+        if (!isMobile() && !NO_DRAW_TOOLS.has(currentTool) && currentView !== 'games') {
+          globalDraw.style.pointerEvents = 'auto';
+        }
+      }, 50);
+    }
+  }
+
+  globalDraw.addEventListener('mouseup',    e => gdEnd(e.clientX, e.clientY));
   globalDraw.addEventListener('mouseleave', () => { gdDrawing = false; gdSnapshot = null; });
 
   globalDraw.addEventListener('touchstart', e => {
