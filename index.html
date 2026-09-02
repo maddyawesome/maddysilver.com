@@ -667,7 +667,17 @@ const SECTIONS = {
   community: {
     label: 'Community',
     html: `
-    <p>Ask me anything — finance, career, tech, life. When I answer, it becomes a sticky note here.</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <svg viewBox="0 0 28 24" width="48" height="42" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+        <rect x="11" y="17" width="6" height="7" fill="#888" stroke="#000" stroke-width="0.75"/>
+        <rect x="1" y="9" width="22" height="9" fill="#cc2200" stroke="#000" stroke-width="1"/>
+        <rect x="1" y="7" width="22" height="5" rx="4" fill="#cc2200" stroke="#000" stroke-width="1"/>
+        <rect x="3" y="12" width="11" height="2" fill="#880000" stroke="#000" stroke-width="0.5"/>
+        <rect x="21" y="10" width="2" height="8" fill="#666" stroke="#000" stroke-width="0.5"/>
+        <rect x="20" y="16" width="6" height="3" fill="#aaa" stroke="#000" stroke-width="0.75"/>
+      </svg>
+      <p style="font-size:13px;">Ask me anything — finance, career, tech, life.<br/>When I answer, it becomes a sticky note here.</p>
+    </div>
     <br/>
 
     <div class="sticky-board">
@@ -685,7 +695,7 @@ const SECTIONS = {
     </div>
 
     <div class="ask-box">
-      <p>Drop a question in the mailbox:</p>
+      <p>Drop your question here ↓</p>
       <iframe data-tally-src="https://tally.so/embed/2E6Vvp?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="109" frameborder="0" marginheight="0" marginwidth="0" title="ask me anything!"></iframe>
     </div>`
   }
@@ -731,6 +741,7 @@ function swapContent(target) {
     homeLayer.style.display = 'none';
     starsSvg.style.display = 'none';
     dotGen++; // cancel any in-flight star/rainbow dot animation
+    dot.style.opacity = '0';
     if (!isMobile()) activateTool(document.querySelector('.tool[title="Select"]'));
     globalDraw.style.pointerEvents = 'none';
     const sec = SECTIONS[target];
