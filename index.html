@@ -228,6 +228,35 @@
       touch-action: none; cursor: crosshair;
     }
 
+    /* ── MAILBOX ICON ──────────────────────────────────────────── */
+    .mailbox-icon {
+      cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; gap: 3px;
+      font-family: "Comic Sans MS", "Comic Neue", cursive;
+      font-size: 10px; color: #555; user-select: none;
+    }
+    .mailbox-icon:hover { color: #cc0066; }
+
+    /* ── STICKY NOTES ──────────────────────────────────────────── */
+    .sticky-board { display: flex; flex-wrap: wrap; gap: 16px; margin: 12px 0 20px; }
+    .sticky {
+      width: 155px; min-height: 100px; padding: 10px 12px;
+      box-shadow: 3px 4px 8px rgba(0,0,0,0.15);
+      font-family: "Comic Sans MS", "Comic Neue", cursive;
+      font-size: 11px; line-height: 1.65;
+    }
+    .sticky.yellow { background: #fffacd; transform: rotate(-1.5deg); }
+    .sticky.pink   { background: #ffd6e0; transform: rotate(0.9deg); }
+    .sticky.green  { background: #d4f1c7; transform: rotate(-0.6deg); }
+    .sticky.blue   { background: #c9e8ff; transform: rotate(1.4deg); }
+    .sticky-q { font-weight: bold; margin-bottom: 5px; color: #222; }
+    .sticky-a { color: #333; }
+    .sticky-sig { text-align: right; font-style: italic; color: #999; font-size: 10px; margin-top: 8px; }
+    .sticky-empty { color: #bbb; font-style: italic; font-size: 11px; padding: 8px 0;
+      font-family: "Comic Sans MS", "Comic Neue", cursive; }
+    .ask-box { margin-top: 16px; padding-top: 14px; border-top: 1px dashed #ccc; }
+    .ask-box > p { font-weight: bold; margin-bottom: 8px; }
+
     @media (max-width: 600px) {
       html, body { height: 100%; overflow: hidden; }
       body { padding: 0; }
@@ -262,6 +291,8 @@
       .sec-title { font-size: 16px; }
       .exp-co { font-size: 14px; }
       .skill-cols { grid-template-columns: 1fr; gap: 12px; }
+      .sticky { width: calc(50% - 8px); min-height: 80px; font-size: 12px; }
+      .sticky-board { gap: 12px; }
     }
   </style>
 </head>
@@ -287,6 +318,7 @@
     <div class="menu-item" onclick="navTo('education')">Education</div>
     <div class="menu-item" onclick="navTo('reading')">Now Reading</div>
     <div class="menu-item" onclick="navTo('contact')">Contact</div>
+    <div class="menu-item" onclick="navTo('community')">Community</div>
   </div>
 
   <div class="sep"></div>
@@ -468,6 +500,31 @@
           </div>
 
           <p class="canvas-hint">↑ click the menu bar to explore ↑</p>
+
+          <div class="mailbox-icon" onclick="navTo('community')" title="Community Q&amp;A">
+            <!-- empty mailbox (flag down) -->
+            <svg class="mb-empty" viewBox="0 0 28 24" width="44" height="38" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="11" y="17" width="6" height="7" fill="#888" stroke="#000" stroke-width="0.75"/>
+              <rect x="1" y="9" width="22" height="9" fill="#cc2200" stroke="#000" stroke-width="1"/>
+              <rect x="1" y="7" width="22" height="5" rx="4" fill="#cc2200" stroke="#000" stroke-width="1"/>
+              <rect x="3" y="12" width="11" height="2" fill="#880000" stroke="#000" stroke-width="0.5"/>
+              <rect x="21" y="10" width="2" height="8" fill="#666" stroke="#000" stroke-width="0.5"/>
+              <rect x="20" y="16" width="6" height="3" fill="#aaa" stroke="#000" stroke-width="0.75"/>
+            </svg>
+            <!-- full mailbox (flag up — has unread questions) -->
+            <svg class="mb-full" viewBox="0 0 28 24" width="44" height="38" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="11" y="17" width="6" height="7" fill="#888" stroke="#000" stroke-width="0.75"/>
+              <rect x="1" y="9" width="22" height="9" fill="#cc2200" stroke="#000" stroke-width="1"/>
+              <rect x="1" y="7" width="22" height="5" rx="4" fill="#cc2200" stroke="#000" stroke-width="1"/>
+              <rect x="3" y="12" width="11" height="2" fill="#880000" stroke="#000" stroke-width="0.5"/>
+              <rect x="4" y="9" width="9" height="4" fill="#fffde0" stroke="#000" stroke-width="0.5"/>
+              <line x1="5.5" y1="10.5" x2="11.5" y2="10.5" stroke="#ccc" stroke-width="0.75"/>
+              <line x1="5.5" y1="12" x2="10" y2="12" stroke="#ccc" stroke-width="0.75"/>
+              <rect x="21" y="10" width="2" height="8" fill="#666" stroke="#000" stroke-width="0.5"/>
+              <rect x="20" y="7" width="6" height="4" fill="#cc4400" stroke="#000" stroke-width="0.75"/>
+            </svg>
+            <span>Community</span>
+          </div>
         </div>
 
         <!-- SECTION LAYER -->
@@ -498,6 +555,10 @@
 </div>
 
 <script>
+// ── MAILBOX STATE ─────────────────────────────────────────────
+// Set to true when you have unanswered questions; false when inbox is clear
+const HAS_MAIL = false;
+
 // ── SECTION CONTENT ──────────────────────────────────────────
 const SECTIONS = {
   games: {
@@ -601,6 +662,38 @@ const SECTIONS = {
     html: `<p><a class="sec-link" href="mailto:madzsilver@gmail.com">madzsilver@gmail.com</a></p><br/>
            <p><a class="sec-link" href="https://www.linkedin.com/in/maddy-silver-6788a917b/" target="_blank">LinkedIn</a></p><br/>
            <p><a class="sec-link" href="https://www.youtube.com/@accountingwithmaddy" target="_blank">@accountingwithmaddy</a></p>`
+  },
+  community: {
+    label: 'Community',
+    html: `
+    <p>Ask me anything — finance, career, tech, life. When I answer, it becomes a sticky note here.</p>
+    <br/>
+
+    <div class="sticky-board">
+      <!--
+        TO ADD AN ANSWERED Q&A: copy one of the blocks below, fill it in, and delete this comment.
+        Colour classes: yellow · pink · green · blue
+
+        <div class="sticky yellow">
+          <div class="sticky-q">Q: Your question here?</div>
+          <div class="sticky-a">A: Your answer here.</div>
+          <div class="sticky-sig">— Maddy</div>
+        </div>
+      -->
+      <div class="sticky-empty">No answered questions yet — be the first to ask ↓</div>
+    </div>
+
+    <div class="ask-box">
+      <p>Drop a question in the mailbox:</p>
+      <!--
+        TO SET UP THE FORM:
+        1. Go to tally.so (free) → create a new form
+        2. Add a short text field "Your question" and optionally a name field
+        3. Share → Embed → copy the <iframe> snippet
+        4. Replace the placeholder below with your iframe
+      -->
+      <p style="color:#aaa;font-style:italic;font-size:11px;">[Tally embed goes here — see HTML comment for setup instructions]</p>
+    </div>`
   }
 };
 
@@ -1168,6 +1261,14 @@ function drawAllStars() {
 }
 
 setTimeout(drawAllStars, 2500);
+
+// ── MAILBOX INIT ──────────────────────────────────────────────
+(function() {
+  const empty = document.querySelector('.mb-empty');
+  const full  = document.querySelector('.mb-full');
+  if (empty) empty.style.display = HAS_MAIL ? 'none' : 'block';
+  if (full)  full.style.display  = HAS_MAIL ? 'block' : 'none';
+})();
 </script>
 
 </body>
