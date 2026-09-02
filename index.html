@@ -1158,13 +1158,9 @@ function drawRainbows() {
     const speed = total / 60;
 
     function frame() {
-      if (gen !== dotGen) { dot.style.opacity = '0'; return; }
+      if (gen !== dotGen) { return; }
       drawn = Math.min(drawn + speed * (0.7 + Math.random() * 0.6), total);
       path.style.strokeDashoffset = total - drawn;
-      const pt = path.getPointAtLength(drawn);
-      dot.style.left = (pt.x - 2) + 'px';
-      dot.style.top  = (pt.y - 2) + 'px';
-      dot.style.opacity = '1';
       if (drawn < total) { requestAnimationFrame(frame); }
       else { setTimeout(next, 250); }
     }
