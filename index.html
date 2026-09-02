@@ -1144,7 +1144,6 @@ function drawRainbows() {
     arcs.push({ d: `M 4,${ch-r} A ${r},${r} 0 0,0 ${r},${ch-4}`, color, sw: 4 });
   });
 
-  dot.style.opacity = '1';
   const gen = ++dotGen;
 
   let i = 0;
@@ -1175,6 +1174,7 @@ function drawRainbows() {
       const pt = path.getPointAtLength(drawn);
       dot.style.left = (pt.x - 2) + 'px';
       dot.style.top  = (pt.y - 2) + 'px';
+      dot.style.opacity = '1';
       if (drawn < total) { requestAnimationFrame(frame); }
       else { setTimeout(next, 250); }
     }
@@ -1241,6 +1241,7 @@ function animateStroke(d, color, sw, fo, onDone) {
     const pt = path.getPointAtLength(drawn);
     dot.style.left = (pt.x - 2) + 'px';
     dot.style.top  = (pt.y - 2) + 'px';
+    dot.style.opacity = '1';
     if (drawn < total) { requestAnimationFrame(frame); }
     else { onDone && setTimeout(onDone, 250); }
   }
@@ -1249,7 +1250,6 @@ function animateStroke(d, color, sw, fo, onDone) {
 
 function drawAllStars() {
   if (currentView !== 'home') return;
-  dot.style.opacity = '1';
   const cw = canvas.offsetWidth;
   const ch = canvas.offsetHeight;
 
