@@ -556,9 +556,8 @@
 </div>
 
 <script>
-// ── MAILBOX STATE ─────────────────────────────────────────────
-// Set to true when you have unanswered questions; false when inbox is clear
-const HAS_MAIL = false;
+// ── WORKER ────────────────────────────────────────────────────
+const WORKER = 'https://maddysilver-community.maddysilver-community.workers.dev';
 
 // ── SECTION CONTENT ──────────────────────────────────────────
 const SECTIONS = {
@@ -680,18 +679,8 @@ const SECTIONS = {
     </div>
     <br/>
 
-    <div class="sticky-board">
-      <!--
-        TO ADD AN ANSWERED Q&A: copy one of the blocks below, fill it in, and delete this comment.
-        Colour classes: yellow · pink · green · blue
-
-        <div class="sticky yellow">
-          <div class="sticky-q">Q: Your question here?</div>
-          <div class="sticky-a">A: Your answer here.</div>
-          <div class="sticky-sig">— Maddy</div>
-        </div>
-      -->
-      <div class="sticky-empty">No answered questions yet — be the first to ask ↓</div>
+    <div class="sticky-board" id="sticky-board">
+      <div class="sticky-empty">Loading…</div>
     </div>
 
     <div class="ask-box">
@@ -757,6 +746,7 @@ function swapContent(target) {
     } else if (target === 'community') {
       decoSvg.innerHTML = '';
       decoSvg.style.display = 'block';
+      loadStickies();
       setTimeout(() => {
         drawRainbows();
         if (typeof Tally !== 'undefined') Tally.loadEmbeds();
@@ -1276,12 +1266,43 @@ function drawAllStars() {
 setTimeout(drawAllStars, 2500);
 
 // ── MAILBOX INIT ──────────────────────────────────────────────
-(function() {
-  const empty = document.querySelector('.mb-empty');
-  const full  = document.querySelector('.mb-full');
-  if (empty) empty.style.display = HAS_MAIL ? 'none' : 'block';
-  if (full)  full.style.display  = HAS_MAIL ? 'block' : 'none';
-})();
+const COLORS = ['yellow', 'pink', 'green', 'blue'];
+
+function setMailbox(hasMail) {
+  document.querySelector('.mb-empty').style.display = hasMail ? 'none' : 'block';
+  document.querySelector('.mb-full').style.display  = hasMail ? 'block' : 'none';
+}
+
+async function loadMailboxStatus() {
+  try {
+    const r = await fetch(WORKER + '/status');
+    const { hasMail } = await r.json();
+    setMailbox(hasMail);
+  } catch {}
+}
+
+async function loadStickies() {
+  const board = document.getElementById('sticky-board');
+  if (!board) return;
+  try {
+    const r = await fetch(WORKER + '/questions');
+    const questions = await r.json();
+    if (questions.length === 0) {
+      board.innerHTML = '<div class="sticky-empty">No answered questions yet — be the first to ask ↓</div>';
+    } else {
+      board.innerHTML = questions.map((q, i) => `
+        <div class="sticky ${COLORS[i % 4]}">
+          <div class="sticky-q">Q: ${q.question}</div>
+          <div class="sticky-a">A: ${q.answer}</div>
+          <div class="sticky-sig">— Maddy</div>
+        </div>`).join('');
+    }
+  } catch {
+    board.innerHTML = '<div class="sticky-empty">No answered questions yet — be the first to ask ↓</div>';
+  }
+}
+
+loadMailboxStatus();
 </script>
 
 </body>
