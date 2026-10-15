@@ -241,10 +241,10 @@
     /* ── BOOKSHELF ─────────────────────────────────────────────── */
     .bookshelf {
       position: absolute; bottom: 16px; right: 16px;
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      flex-direction: column; align-items: center; gap: 2px;
       font-family: "Comic Sans MS", "Comic Neue", cursive;
       font-size: 10px; color: #555; user-select: none;
-      z-index: 5;
+      z-index: 15;
     }
     .bookshelf:hover { color: #cc0066; }
     .shelf-books {
@@ -603,18 +603,20 @@
             </svg>
             <span>Community</span>
           </div>
-
-          <div class="bookshelf" title="Books I've finished">
-            <div class="shelf-books" id="shelf-books"></div>
-            <div class="shelf-plank"></div>
-            <span>Bookshelf</span>
-          </div>
-
-          <div class="book-overlay" id="book-overlay" onclick="closeBook(event)"></div>
         </div>
 
         <!-- SECTION LAYER -->
         <div id="section-layer"></div>
+
+        <!-- BOOKSHELF (shown only on Now Reading) -->
+        <div class="bookshelf" id="bookshelf" title="Books I've finished" style="display:none;">
+          <div class="shelf-books" id="shelf-books"></div>
+          <div class="shelf-plank"></div>
+          <span>Bookshelf</span>
+        </div>
+
+        <!-- BOOK OVERLAY (shown only from Now Reading) -->
+        <div class="book-overlay" id="book-overlay" onclick="closeBook(event)"></div>
 
       </div>
     </div>
@@ -739,7 +741,7 @@ const SECTIONS = {
         <p style="margin-top:6px;">A short, quietly beautiful novel set in 1920s rural Yorkshire. A shell-shocked WWI veteran arrives to restore a medieval church mural and finds an unexpected summer of peace, community, and gentle wonder. It's the kind of book that makes you wish you could stay in it forever.</p>
       </div>
       <br/>
-      <p style="font-size:11px;color:#aaa;">Older reads live on the bookshelf on the home page — click a spine to open.</p>`
+      <p style="font-size:11px;color:#aaa;">Older reads live on the bookshelf — click a spine to open.</p>`
   },
   contact: {
     label: 'Contact',
@@ -803,6 +805,9 @@ function navTo(id) {
 }
 
 function swapContent(target) {
+  const bookshelf = document.getElementById('bookshelf');
+  if (bookshelf) bookshelf.style.display = (target === 'reading') ? 'flex' : 'none';
+  closeBook();
   if (target === 'home') {
     sectionLayer.style.display = 'none';
     decoSvg.style.display = 'none';
