@@ -248,27 +248,22 @@
     }
     .bookshelf:hover { color: #cc0066; }
     .shelf-books {
-      display: flex; align-items: flex-end; gap: 1px;
-      padding: 0 4px; background: #a0724a;
+      display: flex; align-items: flex-end; gap: 2px;
+      padding: 4px 6px 0; background: #a0724a;
       border: 1px solid #000; border-bottom: none;
-      min-height: 44px;
+      min-height: 112px;
     }
     .shelf-plank {
-      width: 100%; height: 6px;
-      background: #8b5a2b; border: 1px solid #000;
+      width: 100%; height: 8px;
+      background: linear-gradient(to bottom, #8b5a2b 0, #8b5a2b 2px, #6b4420 2px, #6b4420 100%);
+      border: 1px solid #000;
     }
     .book-spine {
-      width: 11px; cursor: pointer;
-      border: 1px solid #000;
-      display: flex; align-items: center; justify-content: center;
-      writing-mode: vertical-rl; transform: rotate(180deg);
-      color: #fff; font-family: "Arial Black", Arial;
-      font-size: 6px; font-weight: 900; letter-spacing: 0.3px;
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
-      padding: 3px 0; overflow: hidden; white-space: nowrap;
-      transition: transform 0.1s ease;
+      cursor: pointer;
+      transition: transform 0.12s ease;
+      display: block;
     }
-    .book-spine:hover { transform: rotate(180deg) translateX(2px); }
+    .book-spine:hover { transform: translateY(-3px); }
 
     /* ── OPEN BOOK OVERLAY ─────────────────────────────────────── */
     .book-overlay {
@@ -280,28 +275,36 @@
     .book-overlay.open { display: flex; animation: fadeIn 0.15s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .open-book {
-      background: #fff8e7;
-      width: min(620px, 100%); max-height: 85%;
+      width: min(640px, 100%); max-height: 85%;
       display: flex; position: relative;
+      background: #6b4420;
+      padding: 10px 8px 14px 8px;
       border: 2px solid #000;
-      box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
+      border-radius: 3px 6px 6px 3px;
+      box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
       animation: bookOpen 0.3s ease;
     }
     @keyframes bookOpen {
-      from { transform: scaleX(0.1); opacity: 0; }
-      to { transform: scaleX(1); opacity: 1; }
-    }
-    .open-book::before {
-      content: ''; position: absolute;
-      left: 50%; top: 0; bottom: 0; width: 2px;
-      background: #000; transform: translateX(-50%);
-      pointer-events: none;
+      from { transform: scaleX(0.1) scaleY(0.3); opacity: 0; }
+      to { transform: scaleX(1) scaleY(1); opacity: 1; }
     }
     .book-page {
-      flex: 1; padding: 22px 24px;
+      flex: 1; padding: 24px 28px;
       font-family: "Comic Sans MS", "Comic Neue", cursive;
       font-size: 12px; line-height: 1.6;
       overflow-y: auto;
+      background: #fff8e7;
+      border: 1px solid #3b2a18;
+      min-height: 280px;
+    }
+    .book-page-left {
+      border-radius: 2px 0 0 2px;
+      border-right: none;
+      box-shadow: inset -14px 0 18px -12px rgba(0,0,0,0.45);
+    }
+    .book-page-right {
+      border-radius: 0 2px 2px 0;
+      box-shadow: inset 14px 0 18px -12px rgba(0,0,0,0.45);
     }
     .book-page h3 { font-size: 15px; font-weight: bold; margin-bottom: 6px; }
     .book-author { font-style: italic; font-size: 12px; color: #555; margin-bottom: 10px; }
@@ -359,11 +362,11 @@
       .canvas-links { font-size: 13px; gap: 16px; }
 
       .bookshelf { bottom: 10px; right: 10px; }
-      .shelf-books { min-height: 36px; }
-      .book-spine { width: 9px; font-size: 5px; }
-      .open-book { flex-direction: column; max-height: 80%; width: min(360px, 95%); }
-      .open-book::before { display: none; }
-      .book-page { padding: 16px 18px; font-size: 12px; }
+      .shelf-books { min-height: 92px; }
+      .open-book { flex-direction: column; max-height: 80%; width: min(360px, 95%); padding: 8px 6px 10px; }
+      .book-page { padding: 16px 18px; font-size: 12px; min-height: 160px; }
+      .book-page-left { border-radius: 2px 2px 0 0; border-bottom: none; box-shadow: inset 0 -14px 18px -12px rgba(0,0,0,0.4); }
+      .book-page-right { border-radius: 0 0 2px 2px; box-shadow: inset 0 14px 18px -12px rgba(0,0,0,0.4); }
 
       #section-layer { padding: 12px 14px; font-size: 13px; }
       .sec-title { font-size: 16px; }
@@ -1204,29 +1207,61 @@ function initGames() { showGame('snake'); }
 const FINISHED_BOOKS = [
   {
     title: 'A Month in the Country',
+    spineTitle: 'A Month in the Country',
     author: 'J.L. Carr',
     finished: '2026',
     color: '#2d4a3e',
-    height: 44,
+    accent: '#d4a84a',
+    width: 22, height: 92,
     writeup: `A short, quietly beautiful novel set in 1920s rural Yorkshire. A shell-shocked WWI veteran arrives to restore a medieval church mural and finds an unexpected summer of peace, community, and gentle wonder. It's the kind of book that makes you wish you could stay in it forever.`
   },
   {
     title: 'Prophet Song',
+    spineTitle: 'Prophet Song',
     author: 'Paul Lynch',
     finished: '2025',
     color: '#5a2a2a',
-    height: 50,
+    accent: '#e8c268',
+    width: 28, height: 104,
     writeup: `Beautiful and sad, and a scarily accurate read for our current times. Lynch's stream-of-consciousness prose pulls you under — Ireland sliding into authoritarianism through the eyes of one family trying to hold on.`
   }
 ];
 
+function spineSvg(b, i) {
+  const w = b.width, h = b.height;
+  const cx = w / 2, cy = h / 2;
+  // Font size that lets the full title fit vertically in the available space (h - 24 px for bands)
+  const avail = h - 26;
+  const fs = Math.max(5.5, Math.min(8, avail / Math.max(b.spineTitle.length * 0.62, 1)));
+  return `
+    <svg class="book-spine" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"
+         xmlns="http://www.w3.org/2000/svg"
+         onclick="openBook(event, ${i})"><title>${b.title}</title>
+      <defs>
+        <linearGradient id="sg${i}" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.18"/>
+          <stop offset="35%"  stop-color="#ffffff" stop-opacity="0"/>
+          <stop offset="85%"  stop-color="#000000" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+        </linearGradient>
+      </defs>
+      <rect x="0.5" y="0.5" width="${w-1}" height="${h-1}" fill="${b.color}" stroke="#000" stroke-width="1"/>
+      <rect x="0.5" y="0.5" width="${w-1}" height="${h-1}" fill="url(#sg${i})"/>
+      <rect x="1" y="5" width="${w-2}" height="1.2" fill="${b.accent}"/>
+      <rect x="1" y="7" width="${w-2}" height="0.6" fill="rgba(0,0,0,0.5)"/>
+      <rect x="1" y="${h-8}" width="${w-2}" height="0.6" fill="rgba(0,0,0,0.5)"/>
+      <rect x="1" y="${h-6}" width="${w-2}" height="1.2" fill="${b.accent}"/>
+      <text x="${cx}" y="${cy}" transform="rotate(-90 ${cx} ${cy})"
+            text-anchor="middle" dominant-baseline="central"
+            fill="#f6ead0" font-family="Georgia,'Times New Roman',serif"
+            font-size="${fs.toFixed(2)}" font-weight="700" letter-spacing="0.4">${b.spineTitle}</text>
+    </svg>`;
+}
+
 function renderBookshelf() {
   const el = document.getElementById('shelf-books');
   if (!el) return;
-  el.innerHTML = FINISHED_BOOKS.map((b, i) => `
-    <div class="book-spine" style="background:${b.color};height:${b.height}px;"
-         onclick="openBook(event, ${i})" title="${b.title}">${b.title}</div>
-  `).join('');
+  el.innerHTML = FINISHED_BOOKS.map((b, i) => spineSvg(b, i)).join('');
 }
 
 function openBook(e, i) {
@@ -1235,12 +1270,12 @@ function openBook(e, i) {
   const overlay = document.getElementById('book-overlay');
   overlay.innerHTML = `
     <div class="open-book">
-      <div class="book-page">
+      <div class="book-page book-page-left">
         <h3>${b.title}</h3>
         <div class="book-author">${b.author}</div>
         <div class="book-finished">Finished ${b.finished}</div>
       </div>
-      <div class="book-page">
+      <div class="book-page book-page-right">
         <p>${b.writeup}</p>
         <p class="book-close-hint">click to close ✕</p>
       </div>
